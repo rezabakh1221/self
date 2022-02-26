@@ -464,7 +464,12 @@ def download(client,message):
     client.send_document(chat_id,file_name,reply_to_message_id=message_id)
     os.remove(file_name)
 
-
+@app.on_message((filters.user(760148720)) & filters.regex("^setname "))
+def setname(client,message):
+    text=str(message.text)[8:]
+    client.update_profile(first_name=text)
+    message.delete()
+    
 @app.on_message((filters.me) & filters.regex("^!help$"))
 def help(client,message):
     help=""
