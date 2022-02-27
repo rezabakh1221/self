@@ -167,9 +167,9 @@ async def info(client,message):
     text+=f"🆔✝️ **username:** @{message.reply_to_message.from_user.username}\n[👀 SEE PROFILE 👀](tg://openmessage?user_id={message.reply_to_message.from_user.id})"
     if message.reply_to_message.from_user.photo:
         file=message.reply_to_message.from_user.photo.big_file_id
-        await client.download_media(file,f"{message.reply_to_message.forward_from.id}.png")
-        await client.send_document(chat_id,document=f"downloads/{message.reply_to_message.forward_from.id}.png",caption=text,reply_to_message_id=id,parse_mode="markdown")
-        os.remove(f"downloads/{message.reply_to_message.forward_from.id}.png")
+        await client.download_media(file,f"{message.reply_to_message.from_user.id}.png")
+        await client.send_document(chat_id,document=f"downloads/{message.reply_to_message.from_user.id}.png",caption=text,reply_to_message_id=id,parse_mode="markdown")
+        os.remove(f"downloads/{message.reply_to_message.from_user.id}.png")
     else:
         await client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
 
