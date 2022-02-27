@@ -14,11 +14,9 @@ app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397
 #-------------------------------------------------------------------------------------
 bot=False
 #-------------------------------------------------------------------------------------
-@app.on_message(filters.private)
+@app.on_message(filters.private & bot==True)
 def monshi(c, m):
-    global bot
-    if bot:
-        c.send_message(m.chat.id,"رضا الان افلاینه زیبا")
+    c.send_message(m.chat.id,"رضا الان افلاینه زیبا")
     
 @app.on_message(filters.regex("!bot ") & filters.me)
 def on_off(c, m):
