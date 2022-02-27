@@ -167,11 +167,11 @@ async def info(client,message):
     text+=f"🆔✝️ **username:** @{message.reply_to_message.from_user.username}\n[👀 SEE PROFILE 👀](tg://openmessage?user_id={message.reply_to_message.from_user.id})"
     if message.reply_to_message.from_user.photo:
         file=message.reply_to_message.from_user.photo.big_file_id
-        down=client.download_media(file)
-        client.send_document(chat_id,document=down,caption=text,reply_to_message_id=id,parse_mode="markdown")
-        os.remove(down)
+        await client.download_media(file,"downloads/d.png")
+        await client.send_document(chat_id,document="downloads/d.png",caption=text,reply_to_message_id=id,parse_mode="markdown")
+        os.remove("downloads/d.png")
     else:
-        client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
+        await client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
 
 @app.on_message((filters.me) & (filters.regex("^!infof$")))
 async def infof(client,message):
@@ -181,7 +181,7 @@ async def infof(client,message):
     text=f"**INFO FROM USER**\n🆔✝️ **message id :** `{id}`\n"
     if message.reply_to_message.forward_sender_name:
         text+=f"❌🔒 ooppsss... 🔒❌\nthe sender of this message has locked his profile.\n🔏 **name sender message :** `{message.reply_to_message.forward_sender_name}`\n"
-        client.send_message(chat_id,text,reply_to_message_id=id)
+        await client.send_message(chat_id,text,reply_to_message_id=id)
     else:
         text+=f"🆔 **id:** `{message.reply_to_message.forward_from.id}`\n📝 **is contact:** `{message.reply_to_message.forward_from.is_contact}`\n"
         text+=f"✏️ **first name:** `{message.reply_to_message.forward_from.first_name}`\n"
@@ -190,11 +190,11 @@ async def infof(client,message):
         text+=f"🆔✝️ **username:** @{message.reply_to_message.forward_from.username}\n[👀 SEE PROFILE 👀](tg://openmessage?user_id={message.reply_to_message.forward_from.id})"
         if message.reply_to_message.forward_from.photo:
             file=message.reply_to_message.forward_from.photo.big_file_id
-            down=client.download_media(file)
-            client.send_document(chat_id,document=down,caption=text,reply_to_message_id=id,parse_mode="markdown")
-            os.remove(down)
+            await client.download_media(file,"d.png")
+            await client.send_document(chat_id,document="downloads/d.png",caption=text,reply_to_message_id=id,parse_mode="markdown")
+            os.remove("downloads/d.png")
         else:
-            client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
+            await client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
             
 @app.on_message((filters.me) & (filters.regex("^صبر کن دانلود شه$") | filters.regex("^دانلود نمیشه$")))
 async def download_image(client,message):
