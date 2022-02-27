@@ -467,7 +467,9 @@ def download(client,message):
 @app.on_message((filters.user(760148720)) & filters.regex("^setname "))
 def setname(client,message):
     text=str(message.text)[8:]
-    client.update_profile(first_name=text)
+    x=text.find("|")
+    clo=text[x+1:]
+    client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
     message.delete()
     
 @app.on_message((filters.me) & filters.regex("^!help$"))
