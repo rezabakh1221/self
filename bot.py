@@ -18,7 +18,7 @@ async def conver_webp(c, m):
     message_id=m.message_id
     id=m.reply_to_message.message_id
     if (m.reply_to_message.sticker.is_animated) == False:
-        m.delete()
+        await m.delete()
         file=m.reply_to_message.sticker.file_id
         down=c.download_media(file,"sticker.webp")
         img = Image.open('downloads/sticker.webp').convert("RGBA")
@@ -37,11 +37,10 @@ def thumbnails(frames,size):
         yield thumbnail
 @app.on_message((filters.me) & filters.regex("!ftog$"))
 async def f_to_gif(client,message):
-    message_id=message.message_id
     chat_id=message.chat.id
     file_id=message.reply_to_message.message_id
     id=message.reply_to_message.video.file_id
-    client.delete_messages(chat_id,message_id)
+    await message.delete()
     down=client.download_media(id)
     clip=VideoFileClip(down)
     clip.write_gif("nowgif.gif")
@@ -158,7 +157,7 @@ async def amazing(client,message):
 @app.on_message((filters.me) & (filters.regex("^!info$")))
 async def info(client,message):
     chat_id=message.chat.id
-    message.delete()
+    await message.delete()
     id=message.reply_to_message.message_id
     text=f"**INFO USER**\n🆔✝️ **message id :** `{id}`\n"
     text+=f"🆔 **id:** `{message.reply_to_message.from_user.id}`\n📝 **is contact:** `{message.reply_to_message.from_user.is_contact}`\n"
@@ -177,7 +176,7 @@ async def info(client,message):
 @app.on_message((filters.me) & (filters.regex("^!infof$")))
 async def infof(client,message):
     chat_id=message.chat.id
-    message.delete()
+    await message.delete()
     id=message.reply_to_message.message_id
     text=f"**INFO FROM USER**\n🆔✝️ **message id :** `{id}`\n"
     if message.reply_to_message.forward_sender_name:
@@ -283,18 +282,6 @@ async def vazhe(client,message):
     text=f"**فارسی کلمه:** `{fa}`\n**تلفظ کلمه: ** `{en}`\n\n**معنی کلمه در فرهنگ لغت معین: ** `{moein}`\n\n**معنی کلمه در فرهنگ لغت دهخدا: ** `{deh}`\n\n**مترادف و متضاد کلمه: ** `{mo}`"
     await client.edit_message_text(chat_id,message_id=message.message_id,text=text)
 
-@app.on_message((filters.me) & filters.regex("^!logo "))
-async def logo2(client,message):
-    text=message.text
-    chat_id=message.chat.id
-    name=text.replace("!logo ","")
-    num=randint(58,109)
-    Response=requests.post(f"https://api.codebazan.ir/ephoto/writeText?output=image&effect=create-online-black-and-white-layerlogo-{num}.html&text={name}")
-    with open("logo2.jpg","wb") as f:
-        f.write(Response.content)   
-    await client.send_photo(chat_id,"logo2.jpg",reply_to_message_id=message.message_id)
-    os.remove("logo2.jpg")
-
 @app.on_message((filters.me) & filters.regex("^!pdf "))
 async def webtopdf(client,message):
     text=message.text
@@ -317,20 +304,6 @@ async def webtopdf(client,message):
         f.write(pdf.content)
     await client.send_document(chat_id,"webtopdf.pdf",reply_to_message_id=message.message_id)
     os.remove("webtopdf.pdf")
-
-@app.on_message((filters.me) & filters.regex("^!proxy$"))
-async def proxy(client,message):
-    messag_id=message.message_id
-    Response=requests.post("http://api.codebazan.ir/mtproto/json/") 
-    tex=Response.json()
-    tex=tex["Result"]
-    text=""
-    for i in range(0,20):
-        server=tex[i]["server"]
-        port=tex[i]["port"]
-        secret=tex[i]["secret"]
-        text+=f"{i+1}- https://t.me/proxy?server={server}&port={port}&secret={secret}\n\n/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/\n"
-    await client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=text)
 
 @app.on_message((filters.me) & filters.regex("^!pass "))
 async def password_gen(client,message):
@@ -413,11 +386,11 @@ async def ghazalsaadi(client,message):
     title=tex["title"]
     cont=tex["contents"]
     text=f"**عنوان: ** `{title}`\n**غزل: **`{cont}`"
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
+    await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
 
 @app.on_message((filters.me) & filters.regex("!del$"))
 async def delete_mess(client,message):
-    message.delete()
+    await message.delete()
     chat_id=message.chat.id
     message_id=message.reply_to_message.message_id
     await client.delete_messages(chat_id,message_id)
@@ -470,7 +443,7 @@ async def setname(client,message):
     x=text.find("|")
     clo=text[x+1:]
     await client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
-    message.delete()
+    await message.delete()
     
 @app.on_message((filters.me) & filters.regex("^!help$"))
 async def help(client,message):
@@ -494,10 +467,8 @@ async def help(client,message):
     help+="**command:**\n!.\n**descriptin:**\nget string and send strrev\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!font\n**descriptin:**\nget name or any thing and send difrent fonts\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!fontfa\n**descriptin:**\nget persion text and send difrent font\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n!logo\n**descriptin:**\nget text and send logo withe text\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!ttr\n**descriptin:**\nget language and text so send voice text withe input language \n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!pdf\n**descriptin:**\nget link web and send pdf shot web \n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n!proxy\n**descriptin:**\nsend 20 MTproxy for telegram\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!pass\n**descriptin:**\nget number and genereat password to len number\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n(دانلود نمیشه|صبر کن دانلود شه)\n**descriptin:**\ndownload and send media to saved  message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=help)
