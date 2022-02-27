@@ -15,13 +15,13 @@ app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397
 bot=False
 #-------------------------------------------------------------------------------------
 @app.on_message(filters.private)
-def conver_webp(c, m):
+def monshi(c, m):
     global bot
     if bot:
         c.send_message(m.chat.id,"رضا الان افلاینه زیبا")
     
 @app.on_message(filters.regex("!bot ") & filters.me)
-def conver_webp(c, m):
+def on_off(c, m):
     text=str(m.text)[5:]
     global bot
     if text=="on":
@@ -31,7 +31,7 @@ def conver_webp(c, m):
         bot=False
         m.reply("bot is off.")
 @app.on_message(filters.regex("^!bot$") & filters.me)
-def conver_webp(c, m):
+def vaziat_bot(c, m):
     global bot
     if bot:
         m.reply("bot is on.")
