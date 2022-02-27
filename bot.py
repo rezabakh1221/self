@@ -11,7 +11,33 @@ from moviepy.editor import VideoFileClip
 from PIL import Image, ImageSequence
 
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
-
+#-------------------------------------------------------------------------------------
+bot=False
+#-------------------------------------------------------------------------------------
+@app.on_message(filters.private)
+def conver_webp(c, m):
+    global bot
+    if bot:
+        c.send_message(m.chat.id,"رضا الان افلاینه زیبا")
+    
+@app.on_message(filters.regex("!bot ") & filters.me)
+def conver_webp(c, m):
+    text=str(m.text)[5:]
+    global bot
+    if text=="on":
+        bot=True
+        m.reply("bot is on.")
+    if text=="off":
+        bot=False
+        m.reply("bot is off.")
+@app.on_message(filters.regex("^!bot$") & filters.me)
+def conver_webp(c, m):
+    global bot
+    if bot:
+        m.reply("bot is on.")
+    if not bot:
+        m.reply("bot is off.")
+    
 @app.on_message(filters.regex("!stop") & filters.me)
 def conver_webp(c, m):
     chat_id=m.chat.id
