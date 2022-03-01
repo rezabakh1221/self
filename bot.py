@@ -471,9 +471,9 @@ async def create_jpg():
     photo=list_photo[randint(0,1)]
     text=timer()
     if photo=="1.jpg":
-        await photo_one(text)
+        photo_one(text)
     if photo=="2.jpg":
-        await photo_two(text)
+        photo_two(text)
     return photo
 async def delete_photo(client,message):
     print("6")
