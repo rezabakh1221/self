@@ -9,7 +9,8 @@ import googlesearch
 from clint.textui import progress
 from moviepy.editor import VideoFileClip
 from PIL import Image, ImageSequence
-import cv2,numpy
+import numpy
+from cv2 import imread,putText,FONT_HERSHEY_SCRIPT_COMPLEX,imwrite,LINE_AA
 from datetime import datetime,timedelta
 from pytz import timezone
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
@@ -440,15 +441,15 @@ async def download(client,message):
     os.remove(file_name)
 
 async def photo_one(date):
-    image = cv2.imread("1.jpg")
+    image = imread("1.jpg")
     org = ((int) (image.shape[1]/2-268/2+70), (int) (image.shape[0]/2+300/2))
-    image = cv2.putText(image, date, org, cv2.FONT_HERSHEY_SCRIPT_COMPLEX ,0.8,(255, 255, 255) , 2, cv2.LINE_AA)
-    cv2.imwrite("1-1.jpg", image)
+    image = putText(image, date, org, FONT_HERSHEY_SCRIPT_COMPLEX ,0.8,(255, 255, 255) , 2, LINE_AA)
+    imwrite("1-1.jpg", image)
 async def photo_two(date):
-    image = cv2.imread("2.jpg")
+    image = imread("2.jpg")
     org = ((int) (image.shape[1]/2-268/2+70), (int) (image.shape[0]/2-200))
-    image = cv2.putText(image, date, org, cv2.FONT_HERSHEY_SCRIPT_COMPLEX ,0.8,(255, 255, 255) , 2, cv2.LINE_AA)
-    cv2.imwrite("2-2.jpg", image)
+    image = putText(image, date, org, FONT_HERSHEY_SCRIPT_COMPLEX ,0.8,(255, 255, 255) , 2, LINE_AA)
+    imwrite("2-2.jpg", image)
 async def timer():
     iran = timezone("Asia/Tehran")
     date_time = datetime.now(iran).strftime("%d-%m-%Y %H:%M:%S/%p")
