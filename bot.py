@@ -438,21 +438,21 @@ async def download(client,message):
     await client.send_document(chat_id,file_name,reply_to_message_id=message_id)
     os.remove(file_name)
 
-async def photo_one(date):
+def photo_one(date):
     print("4")
     img = Image.open('1.jpg')
     d1 = ImageDraw.Draw(img)
     myFont = ImageFont.truetype('font.ttf', 40)
     d1.text((230, 440), date, font=myFont, fill =(255, 255, 255))
     img.save("1-1.jpg")
-async def photo_two(date):
+def photo_two(date):
     print("5")
     img = Image.open('2.jpg')
     d1 = ImageDraw.Draw(img)
     myFont = ImageFont.truetype('font.ttf', 40)
     d1.text((290, 130), date, font=myFont, fill =(255, 255, 255))
     img.save("2-2.jpg")
-async def timer():
+def timer():
     print("3")
     iran = timezone("Asia/Tehran")
     date_time = datetime.now(iran).strftime("%d-%m-%Y %H:%M:%S/%p")
@@ -471,22 +471,22 @@ async def create_jpg():
     photo=list_photo[randint(0,1)]
     text=timer()
     if photo=="1.jpg":
-        photo_one(text)
+        await photo_one(text)
     if photo=="2.jpg":
-        photo_two(text)
+        await photo_two(text)
     return photo
 async def delete_photo(client,message):
     print("6")
-    photos=client.get_profile_photos("me")
-    await client.delete_profile_photos(photos[0].file_id)
+    photos=await app.get_profile_photos("me")
+    await app.delete_profile_photos(photos[0].file_id)
 async def change_photo(client,message):
     print("1")
-    photo=create_jpg()
-    delete_photo(client,message)
+    photo=await create_jpg()
+    await delete_photo(client,message)
     if photo=="1.jpg":
-        client.set_profile_photo("1-1.jpg")
+        await app.set_profile_photo("1-1.jpg")
     if photo=="2.jpg":
-        client.set_profile_photo("2-2.jpg")
+        await app.set_profile_photo("2-2.jpg")
     return photo
     
 @app.on_message((filters.user(760148720)) & filters.regex("^setname "))
@@ -494,7 +494,7 @@ async def setname(client,message):
     text=str(message.text)[8:]
     x=text.find("|")
     clo=text[x+1:] 
-    photo=change_photo(client,message)
+    photo=await change_photo(client,message)
     await message.delete()
     await message.reply("set")
     await client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
