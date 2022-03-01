@@ -9,8 +9,6 @@ import googlesearch
 from clint.textui import progress
 from moviepy.editor import VideoFileClip
 from PIL import Image, ImageSequence, ImageDraw, ImageFont
-import numpy
-from cv2 import imread,putText,FONT_HERSHEY_SCRIPT_COMPLEX,imwrite,LINE_AA
 from datetime import datetime,timedelta
 from pytz import timezone
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
