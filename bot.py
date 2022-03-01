@@ -439,21 +439,18 @@ async def download(client,message):
     os.remove(file_name)
 
 def photo_one(date):
-    print("4")
     img = Image.open('1.jpg')
     d1 = ImageDraw.Draw(img)
     myFont = ImageFont.truetype('font.ttf', 40)
     d1.text((230, 440), date, font=myFont, fill =(255, 255, 255))
     img.save("1-1.jpg")
 def photo_two(date):
-    print("5")
     img = Image.open('2.jpg')
     d1 = ImageDraw.Draw(img)
     myFont = ImageFont.truetype('font.ttf', 40)
     d1.text((290, 130), date, font=myFont, fill =(255, 255, 255))
     img.save("2-2.jpg")
 def timer():
-    print("3")
     iran = timezone("Asia/Tehran")
     date_time = datetime.now(iran).strftime("%d-%m-%Y %H:%M:%S/%p")
     date,time1 = date_time.split()
@@ -466,7 +463,6 @@ def timer():
         text=f"{hour} : {minutes} AM"
     return text
 async def create_jpg():
-    print("2")
     list_photo=["1.jpg","2.jpg"]
     photo=list_photo[randint(0,1)]
     text=timer()
@@ -476,11 +472,9 @@ async def create_jpg():
         photo_two(text)
     return photo
 async def delete_photo(client,message):
-    print("6")
     photos=await app.get_profile_photos("me")
     await app.delete_profile_photos(photos[0].file_id)
 async def change_photo(client,message):
-    print("1")
     photo=await create_jpg()
     await delete_photo(client,message)
     if photo=="1.jpg":
@@ -496,8 +490,9 @@ async def setname(client,message):
     clo=text[x+1:] 
     photo=await change_photo(client,message)
     await message.delete()
-    await message.reply("set")
     await client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
+    time.sleep(5)
+    message.reply("set")
     if photo=="1.jpg":
         os.remove("1-1.jpg")
     if photo=="2.jpg":
