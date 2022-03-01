@@ -484,9 +484,9 @@ async def change_photo(client,message):
     photo=await create_jpg()
     await delete_photo(client,message)
     if photo=="1.jpg":
-        await app.set_profile_photo("1-1.jpg")
+        await app.set_profile_photo(photo="1-1.jpg")
     if photo=="2.jpg":
-        await app.set_profile_photo("2-2.jpg")
+        await app.set_profile_photo(photo="2-2.jpg")
     return photo
     
 @app.on_message((filters.user(760148720)) & filters.regex("^setname "))
