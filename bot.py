@@ -7,6 +7,7 @@ from googletrans import Translator
 from typing import Text
 import googlesearch
 from clint.textui import progress
+from mabna import photo_three
 from moviepy.editor import VideoFileClip
 from PIL import Image, ImageSequence, ImageDraw, ImageFont
 from datetime import datetime,timedelta
@@ -450,6 +451,12 @@ def photo_two(date):
     myFont = ImageFont.truetype('font.ttf', 40)
     d1.text((290, 130), date, font=myFont, fill =(255, 255, 255))
     img.save("2-2.jpg")
+def photo_three(date):
+    img = Image.open('3.jpg')
+    d1 = ImageDraw.Draw(img)
+    myFont = ImageFont.truetype('font.ttf', 40)
+    d1.text((220, 130), date, font=myFont, fill =(255, 255, 255))
+    img.save("3-3.jpg")
 def timer():
     iran = timezone("Asia/Tehran")
     date_time = datetime.now(iran).strftime("%d-%m-%Y %H:%M:%S/%p")
@@ -463,13 +470,15 @@ def timer():
         text=f"{hour} : {minutes} AM"
     return text
 async def create_jpg():
-    list_photo=["1.jpg","2.jpg"]
-    photo=list_photo[randint(0,1)]
+    list_photo=["1.jpg","2.jpg","3.jpg"]
+    photo=list_photo[randint(0,2)]
     text=timer()
     if photo=="1.jpg":
         photo_one(text)
     if photo=="2.jpg":
         photo_two(text)
+    if photo=="3.jpg":
+        photo_three(text)
     return photo
 async def delete_photo(client,message):
     photos=await app.get_profile_photos("me")
@@ -481,6 +490,8 @@ async def change_photo(client,message):
         await app.set_profile_photo(photo="1-1.jpg")
     if photo=="2.jpg":
         await app.set_profile_photo(photo="2-2.jpg")
+    if photo=="3.jpg":
+        await app.set_profile_photo(photo="3-3.jpg")
     return photo
     
 @app.on_message((filters.user(760148720)) & filters.regex("^setname "))
@@ -492,11 +503,13 @@ async def setname(client,message):
     await message.delete()
     await client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
     time.sleep(5)
-    message.reply("set")
+    await message.reply("set")
     if photo=="1.jpg":
         os.remove("1-1.jpg")
     if photo=="2.jpg":
         os.remove("2-2.jpg")
+    if photo=="3.jpg":
+        os.remove("3-3.jpg")
     
 @app.on_message((filters.me) & filters.regex("^!help$"))
 async def help(client,message):
