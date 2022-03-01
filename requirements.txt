@@ -12,3 +12,4 @@ moviepy~=1.0.3
 lottie
 cairosvg
 opencv-python
+numpy>=1.14.5
