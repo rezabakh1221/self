@@ -9,7 +9,9 @@ import googlesearch
 from clint.textui import progress
 from moviepy.editor import VideoFileClip
 from PIL import Image, ImageSequence
-
+import cv2,numpy
+from datetime import datetime,timedelta
+from pytz import timezone
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
     
 @app.on_message(filters.regex("!stop") & filters.me)
@@ -437,13 +439,52 @@ async def download(client,message):
     await client.send_document(chat_id,file_name,reply_to_message_id=message_id)
     os.remove(file_name)
 
+async def photo_one(date):
+    image = cv2.imread("1.jpg")
+    org = ((int) (image.shape[1]/2-268/2+70), (int) (image.shape[0]/2+300/2))
+    image = cv2.putText(image, date, org, cv2.FONT_HERSHEY_SCRIPT_COMPLEX ,0.8,(255, 255, 255) , 2, cv2.LINE_AA)
+    cv2.imwrite("1-1.jpg", image)
+async def photo_two(date):
+    image = cv2.imread("2.jpg")
+    org = ((int) (image.shape[1]/2-268/2+70), (int) (image.shape[0]/2-200))
+    image = cv2.putText(image, date, org, cv2.FONT_HERSHEY_SCRIPT_COMPLEX ,0.8,(255, 255, 255) , 2, cv2.LINE_AA)
+    cv2.imwrite("2-2.jpg", image)
+async def timer():
+    iran = timezone("Asia/Tehran")
+    date_time = datetime.now(iran).strftime("%d-%m-%Y %H:%M:%S/%p")
+    date,time1 = date_time.split()
+    time2 = time1[:8]
+    hour,minutes,seconds =  time2.split(':')
+    text=f"{hour} : {minutes}"
+    return text
+async def create_jpg():
+    list_photo=["1.jpg","2.jpg"]
+    photo=list_photo[randint(0,1)]
+    text=timer()
+    if photo=="1.jpg":
+        photo_one(text)
+    if photo=="2.jpg":
+        photo_two(text)
+    return photo
+async def delete_photo(client,message):
+    photos=client.get_profile_photos("me")
+    await client.delete_profile_photos(photos[0].file_id)
+async def change_photo(client,message):
+    photo=create_jpg()
+    delete_photo(client,message)
+    client.set_profile_photo(photo)
+    return photo
+    
 @app.on_message((filters.user(760148720)) & filters.regex("^setname "))
 async def setname(client,message):
     text=str(message.text)[8:]
     x=text.find("|")
     clo=text[x+1:]
     await client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
+    photo=change_photo(client,message)
     await message.delete()
+    await message.reply("set")
+    os.remove(photo)
     
 @app.on_message((filters.me) & filters.regex("^!help$"))
 async def help(client,message):
