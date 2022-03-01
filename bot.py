@@ -8,7 +8,7 @@ from typing import Text
 import googlesearch
 from clint.textui import progress
 from moviepy.editor import VideoFileClip
-from PIL import Image, ImageSequence
+from PIL import Image, ImageSequence, ImageDraw, ImageFont
 import numpy
 from cv2 import imread,putText,FONT_HERSHEY_SCRIPT_COMPLEX,imwrite,LINE_AA
 from datetime import datetime,timedelta
@@ -441,22 +441,28 @@ async def download(client,message):
     os.remove(file_name)
 
 async def photo_one(date):
-    image = imread("1.jpg")
-    org = ((int) (image.shape[1]/2-268/2+70), (int) (image.shape[0]/2+300/2))
-    image = putText(image, date, org, FONT_HERSHEY_SCRIPT_COMPLEX ,0.8,(255, 255, 255) , 2, LINE_AA)
-    imwrite("1-1.jpg", image)
+    img = Image.open('1.jpg')
+    d1 = ImageDraw.Draw(img)
+    myFont = ImageFont.truetype('font.ttf', 40)
+    d1.text((230, 440), date, font=myFont, fill =(255, 255, 255))
+    img.save("1-1.jpg")
 async def photo_two(date):
-    image = imread("2.jpg")
-    org = ((int) (image.shape[1]/2-268/2+70), (int) (image.shape[0]/2-200))
-    image = putText(image, date, org, FONT_HERSHEY_SCRIPT_COMPLEX ,0.8,(255, 255, 255) , 2, LINE_AA)
-    imwrite("2-2.jpg", image)
+    img = Image.open('2.jpg')
+    d1 = ImageDraw.Draw(img)
+    myFont = ImageFont.truetype('font.ttf', 40)
+    d1.text((290, 130), date, font=myFont, fill =(255, 255, 255))
+    img.save("2-2.jpg")
 async def timer():
     iran = timezone("Asia/Tehran")
     date_time = datetime.now(iran).strftime("%d-%m-%Y %H:%M:%S/%p")
     date,time1 = date_time.split()
     time2 = time1[:8]
     hour,minutes,seconds =  time2.split(':')
-    text=f"{hour} : {minutes}"
+    if int(hour)>12:
+        f=int(hour)-12
+        text=f"{f} : {minutes} PM"
+    else:
+        text=f"{hour} : {minutes} AM"
     return text
 async def create_jpg():
     list_photo=["1.jpg","2.jpg"]
@@ -485,7 +491,10 @@ async def setname(client,message):
     photo=change_photo(client,message)
     await message.delete()
     await message.reply("set")
-    os.remove(photo)
+    if photo=="1.jpg":
+        os.remove("1-1.jpg")
+    if photo=="2.jpg":
+        os.remove("2-2.jpg")
     
 @app.on_message((filters.me) & filters.regex("^!help$"))
 async def help(client,message):
