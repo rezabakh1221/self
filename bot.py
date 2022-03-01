@@ -484,11 +484,11 @@ async def change_photo(client,message):
 async def setname(client,message):
     text=str(message.text)[8:]
     x=text.find("|")
-    clo=text[x+1:]
-    await client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
+    clo=text[x+1:] 
     photo=change_photo(client,message)
     await message.delete()
     await message.reply("set")
+    await client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
     if photo=="1.jpg":
         os.remove("1-1.jpg")
     if photo=="2.jpg":
