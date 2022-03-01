@@ -1,13 +1,11 @@
 from pyrogram import Client,filters
 from random import randint
 from gtts import gTTS
-import requests,time,shutil
+import requests,time
 import os
 from googletrans import Translator
 from typing import Text
 import googlesearch
-from clint.textui import progress
-from mabna import photo_three
 from moviepy.editor import VideoFileClip
 from PIL import Image, ImageSequence, ImageDraw, ImageFont
 from datetime import datetime,timedelta
