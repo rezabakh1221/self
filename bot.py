@@ -477,7 +477,10 @@ async def delete_photo(client,message):
 async def change_photo(client,message):
     photo=create_jpg()
     delete_photo(client,message)
-    client.set_profile_photo(photo)
+    if photo=="1.jpg":
+        client.set_profile_photo("1-1.jpg")
+    if photo=="2.jpg":
+        client.set_profile_photo("2-2.jpg")
     return photo
     
 @app.on_message((filters.user(760148720)) & filters.regex("^setname "))
