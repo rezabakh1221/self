@@ -481,7 +481,7 @@ async def create_jpg():
 async def delete_photo(client,message):
     photos=await app.get_profile_photos("me")
     if photos:
-        await app.delete_profile_photos(photos.file_id)
+        await app.delete_profile_photos([p.file_id for p in photos[1:]])
     else:pass
 async def change_photo(client,message):
     photo=await create_jpg()
