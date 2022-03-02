@@ -480,7 +480,9 @@ async def create_jpg():
     return photo
 async def delete_photo(client,message):
     photos=await app.get_profile_photos("me")
-    await app.delete_profile_photos(photos[0].file_id)
+    if photos:
+        await app.delete_profile_photos(photos.file_id)
+    else:pass
 async def change_photo(client,message):
     photo=await create_jpg()
     await delete_photo(client,message)
@@ -500,8 +502,8 @@ async def setname(client,message):
     photo=await change_photo(client,message)
     await message.delete()
     await client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
-    time.sleep(5)
-    await message.reply("set")
+    await time.sleep(5)
+    await message.reply("settime")
     if photo=="1.jpg":
         os.remove("1-1.jpg")
     if photo=="2.jpg":
