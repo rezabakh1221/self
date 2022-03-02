@@ -435,27 +435,11 @@ async def download(client,message):
     f.close()
     await client.edit_message_text(chat_id,message_id,f"👾 **UPLOADING...**\n**FILE NAME:** {file_name}\n")
     await client.send_document(chat_id,file_name,reply_to_message_id=message_id)
-    os.remove(file_name)
+    os.remove(file_name) 
 
-def photo_one(date):
-    img = Image.open('1.jpg')
-    d1 = ImageDraw.Draw(img)
-    myFont = ImageFont.truetype('font.ttf', 40)
-    d1.text((230, 440), date, font=myFont, fill =(255, 255, 255))
-    img.save("1-1.jpg")
-def photo_two(date):
-    img = Image.open('2.jpg')
-    d1 = ImageDraw.Draw(img)
-    myFont = ImageFont.truetype('font.ttf', 40)
-    d1.text((290, 130), date, font=myFont, fill =(255, 255, 255))
-    img.save("2-2.jpg")
-def photo_three(date):
-    img = Image.open('3.jpg')
-    d1 = ImageDraw.Draw(img)
-    myFont = ImageFont.truetype('font.ttf', 40)
-    d1.text((220, 130), date, font=myFont, fill =(255, 255, 255))
-    img.save("3-3.jpg")
-def timer():
+async def change_photo(client,message):
+    list_photo=["1.jpg","2.jpg","3.jpg"]
+    photo=list_photo[randint(0,2)]
     iran = timezone("Asia/Tehran")
     date_time = datetime.now(iran).strftime("%d-%m-%Y %H:%M:%S/%p")
     date,time1 = date_time.split()
@@ -466,26 +450,28 @@ def timer():
         text=f"{f} : {minutes} PM"
     else:
         text=f"{hour} : {minutes} AM"
-    return text
-async def create_jpg():
-    list_photo=["1.jpg","2.jpg","3.jpg"]
-    photo=list_photo[randint(0,2)]
-    text=timer()
     if photo=="1.jpg":
-        photo_one(text)
+        img = Image.open('1.jpg')
+        d1 = ImageDraw.Draw(img)
+        myFont = ImageFont.truetype('font.ttf', 40)
+        d1.text((230, 440), text, font=myFont, fill =(255, 255, 255))
+        img.save("1-1.jpg")
     if photo=="2.jpg":
-        photo_two(text)
+        img = Image.open('2.jpg')
+        d1 = ImageDraw.Draw(img)
+        myFont = ImageFont.truetype('font.ttf', 40)
+        d1.text((290, 130), text, font=myFont, fill =(255, 255, 255))
+        img.save("2-2.jpg")
     if photo=="3.jpg":
-        photo_three(text)
-    return photo
-async def delete_photo(client,message):
+        img = Image.open('3.jpg')
+        d1 = ImageDraw.Draw(img)
+        myFont = ImageFont.truetype('font.ttf', 40)
+        d1.text((220, 130), text, font=myFont, fill =(255, 255, 255))
+        img.save("3-3.jpg")
     photos=await app.get_profile_photos("me")
     if photos:
         await app.delete_profile_photos([p.file_id for p in photos])
     else:pass
-async def change_photo(client,message):
-    photo=await create_jpg()
-    await delete_photo(client,message)
     if photo=="1.jpg":
         await app.set_profile_photo(photo="1-1.jpg")
     if photo=="2.jpg":
@@ -502,7 +488,7 @@ async def setname(client,message):
     await change_photo(client,message)
     await message.delete()
     await client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
-    time.sleep(2)
+    time.sleep(1)
     await message.reply("settime")
 
 @app.on_message((filters.me) & filters.regex("^!help$"))
