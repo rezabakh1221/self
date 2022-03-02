@@ -502,7 +502,7 @@ async def setname(client,message):
     await change_photo(client,message)
     await message.delete()
     await client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
-    time.sleep(1)
+    time.sleep(2)
     await message.reply("settime")
 
 @app.on_message((filters.me) & filters.regex("^!help$"))
