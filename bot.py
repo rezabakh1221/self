@@ -502,7 +502,7 @@ async def setname(client,message):
     photo=await change_photo(client,message)
     await message.delete()
     await client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
-    await time.sleep(5)
+    time.sleep(5)
     await message.reply("settime")
     if photo=="1.jpg":
         os.remove("1-1.jpg")
