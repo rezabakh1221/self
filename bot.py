@@ -481,7 +481,7 @@ async def create_jpg():
 async def delete_photo(client,message):
     photos=await app.get_profile_photos("me")
     if photos:
-        await app.delete_profile_photos([p.file_id for p in photos[1:]])
+        await app.delete_profile_photos([p.file_id for p in photos])
     else:pass
 async def change_photo(client,message):
     photo=await create_jpg()
@@ -499,18 +499,12 @@ async def setname(client,message):
     text=str(message.text)[8:]
     x=text.find("|")
     clo=text[x+1:] 
-    photo=await change_photo(client,message)
+    await change_photo(client,message)
     await message.delete()
     await client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
-    time.sleep(5)
+    time.sleep(1)
     await message.reply("settime")
-    if photo=="1.jpg":
-        os.remove("1-1.jpg")
-    if photo=="2.jpg":
-        os.remove("2-2.jpg")
-    if photo=="3.jpg":
-        os.remove("3-3.jpg")
-    
+
 @app.on_message((filters.me) & filters.regex("^!help$"))
 async def help(client,message):
     help=""
