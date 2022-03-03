@@ -554,5 +554,4 @@ async def help(client,message):
     t1=threading.Thread(target=bot.help,name=str("help"),args=(client,message))
     t1.start()
     t1.join()
-print(os.cpu_count())
 app.run()
