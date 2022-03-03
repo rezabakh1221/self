@@ -6,38 +6,39 @@ from googletrans import Translator
 from typing import Text
 from moviepy.editor import VideoFileClip
 from PIL import Image, ImageSequence, ImageDraw, ImageFont
-from datetime import datetime
+from datetime import datetime,timedelta
 from pytz import timezone
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
 
-#-------------------------------------------------------------------------------------stop
-def conver_webp(c, m):
+@app.on_message(filters.regex("!stop") & filters.me)
+async def conver_webp(c, m):
     chat_id=m.chat.id
     message_id=m.message_id
     id=m.reply_to_message.message_id
     if (m.reply_to_message.sticker.is_animated) == False:
-        m.delete()
+        await m.delete()
         file=m.reply_to_message.sticker.file_id
         down=c.download_media(file,"sticker.webp")
         img = Image.open('downloads/sticker.webp').convert("RGBA")
         img.save("image.png","PNG")
-        c.send_photo(chat_id,"image.png",reply_to_message_id=id)
-        c.send_document(chat_id,document="image.png",reply_to_message_id=id)
+        await c.send_photo(chat_id,"image.png",reply_to_message_id=id)
+        await c.send_document(chat_id,document="image.png",reply_to_message_id=id)
         os.remove("image.png")
         os.remove('downloads/sticker.webp')
     else:
-        c.edit_message_text(chat_id, message_id,"opps...\nthis sticker is animated\nme can convert the stickers that are not animated🥺\n")
-#-------------------------------------------------------------------------------------ftog
+        await c.edit_message_text(chat_id, message_id,"opps...\nthis sticker is animated\nme can convert the stickers that are not animated🥺\n")
+
 def thumbnails(frames,size):
     for frame in frames:
         thumbnail = frame.copy()
         thumbnail.thumbnail(size, Image.ANTIALIAS)
         yield thumbnail
-def f_to_gif(client,message):
+@app.on_message((filters.me) & filters.regex("!ftog$"))
+async def f_to_gif(client,message):
     chat_id=message.chat.id
     file_id=message.reply_to_message.message_id
     id=message.reply_to_message.video.file_id
-    message.delete()
+    await message.delete()
     down=client.download_media(id)
     clip=VideoFileClip(down)
     clip.write_gif("nowgif.gif")
@@ -48,32 +49,113 @@ def f_to_gif(client,message):
     om = next(frames) # Handle first frame separately
     om.info = im.info # Copy sequence info
     om.save("nowgif.gif", save_all=True, append_images=list(frames))
-    client.send_animation(chat_id,"nowgif.gif",reply_to_message_id=file_id)
+    await client.send_animation(chat_id,"nowgif.gif",reply_to_message_id=file_id)
     os.remove(down)
     os.remove("nowgif.gif")
-#------------------------------------------------------------------------------------kos
-def like(client,message):
+
+
+@app.on_message((filters.me) & (filters.regex("لایک") | filters.regex("دوس") | filters.regex("عالیه") | filters.regex("حق") | filters.regex("👍")))
+async def like(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
         message_id=message.reply_to_message.message_id
-        client.send_reaction(chat_id,message_id,"👍")
+        await client.send_reaction(chat_id,message_id,"👍")
 
-def not_like(client,message):
+@app.on_message((filters.me) & (filters.regex("نموخام") | filters.regex("مزخرف")  | filters.regex("👎")))
+async def not_like(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
         message_id=message.reply_to_message.message_id
-        client.send_reaction(chat_id,message_id,"👎")
+        await client.send_reaction(chat_id,message_id,"👎")
 
-def love(client,message):
+@app.on_message((filters.me) & (filters.regex("عشق") | filters.regex("عاشق") | filters.regex("زندگیمی") | filters.regex("فداتشم") | filters.regex("❤️")))
+async def love(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
         message_id=message.reply_to_message.message_id
-        client.send_reaction(chat_id,message_id,"❤️")
+        await client.send_reaction(chat_id,message_id,"❤️")
 
-#---------------------------------------------------------------------------------------info & infof
-def info(client,message):
+@app.on_message((filters.me) & (filters.regex("هورا") | filters.regex("جشن") | filters.regex("مبارک") | filters.regex("🎉")))
+async def hoppy(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        await client.send_reaction(chat_id,message_id,"🎉")
+
+@app.on_message((filters.me) & (filters.regex("ریدم")| filters.regex("تف") | filters.regex("گوه") | filters.regex("💩")))
+async def goh(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        await client.send_reaction(chat_id,message_id,"💩")
+
+@app.on_message((filters.me) & (filters.regex("شیطون") | filters.regex("شیطونی") | filters.regex("😁")))
+async def lusifer(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        await client.send_reaction(chat_id,message_id,"😁")
+
+@app.on_message((filters.me) & (filters.regex("جووون") | filters.regex("خوشکله") | filters.regex("زیبا") | filters.regex("🤩")))
+async def biutiful(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        await client.send_reaction(chat_id,message_id,"🤩")
+
+@app.on_message((filters.me) & (filters.regex("اتیش") | filters.regex("اتیشپاره") | filters.regex("بخورمت") | filters.regex("اتیشی") | filters.regex("🔥")))
+async def fire(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        await client.send_reaction(chat_id,message_id,"🔥")
+
+@app.on_message((filters.me) & (filters.regex("مشکل") | filters.regex("نکن") | filters.regex("عجیبه") | filters.regex("😱")))
+async def amazing(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        await client.send_reaction(chat_id,message_id,"😱")
+
+@app.on_message((filters.me) & (filters.regex("مخم ترکید") | filters.regex("این چی بود") | filters.regex("وای خدا") | filters.regex("🤯")))
+async def amazing(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        await client.send_reaction(chat_id,message_id,"🤯")
+
+@app.on_message((filters.me) & (filters.regex("تشویق") | filters.regex("تکبیر") | filters.regex("افرین") | filters.regex("👏🏻")))
+async def amazing(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        await client.send_reaction(chat_id,message_id,"👏🏻")
+
+@app.on_message((filters.me) & (filters.regex("فوش") | filters.regex("چرت") | filters.regex("دعوا") | filters.regex("🤬")))
+async def amazing(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        await client.send_reaction(chat_id,message_id,"🤬")
+
+@app.on_message((filters.me) & (filters.regex("ببخشید") | filters.regex("ببشید") | filters.regex("اشتی") | filters.regex("😢")))
+async def amazing(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        await client.send_reaction(chat_id,message_id,"🤮")
+
+@app.on_message((filters.me) & (filters.regex("حالم بهم خورد") | filters.regex("چه زشت") | filters.regex("حالت تهوع") | filters.regex("🤮")))
+async def amazing(client,message):
+    if message.reply_to_message:
+        chat_id=message.chat.id
+        message_id=message.reply_to_message.message_id
+        await client.send_reaction(chat_id,message_id,"😢")
+
+@app.on_message((filters.me) & (filters.regex("^!info$")))
+async def info(client,message):
     chat_id=message.chat.id
-    message.delete()
+    await message.delete()
     id=message.reply_to_message.message_id
     text=f"**INFO USER**\n🆔✝️ **message id :** `{id}`\n"
     text+=f"🆔 **id:** `{message.reply_to_message.from_user.id}`\n📝 **is contact:** `{message.reply_to_message.from_user.is_contact}`\n"
@@ -83,20 +165,21 @@ def info(client,message):
     text+=f"🆔✝️ **username:** @{message.reply_to_message.from_user.username}\n[👀 SEE PROFILE 👀](tg://openmessage?user_id={message.reply_to_message.from_user.id})"
     if message.reply_to_message.from_user.photo:
         file=message.reply_to_message.from_user.photo.big_file_id
-        client.download_media(file,f"{message.reply_to_message.from_user.id}.png")
-        client.send_document(chat_id,document=f"downloads/{message.reply_to_message.from_user.id}.png",caption=text,reply_to_message_id=id,parse_mode="markdown")
+        await client.download_media(file,f"{message.reply_to_message.from_user.id}.png")
+        await client.send_document(chat_id,document=f"downloads/{message.reply_to_message.from_user.id}.png",caption=text,reply_to_message_id=id,parse_mode="markdown")
         os.remove(f"downloads/{message.reply_to_message.from_user.id}.png")
     else:
-        client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
+        await client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
 
-def infof(client,message):
+@app.on_message((filters.me) & (filters.regex("^!infof$")))
+async def infof(client,message):
     chat_id=message.chat.id
-    message.delete()
+    await message.delete()
     id=message.reply_to_message.message_id
     text=f"**INFO FROM USER**\n🆔✝️ **message id :** `{id}`\n"
     if message.reply_to_message.forward_sender_name:
         text+=f"❌🔒 ooppsss... 🔒❌\nthe sender of this message has locked his profile.\n🔏 **name sender message :** `{message.reply_to_message.forward_sender_name}`\n"
-        client.send_message(chat_id,text,reply_to_message_id=id)
+        await client.send_message(chat_id,text,reply_to_message_id=id)
     else:
         text+=f"🆔 **id:** `{message.reply_to_message.forward_from.id}`\n📝 **is contact:** `{message.reply_to_message.forward_from.is_contact}`\n"
         text+=f"✏️ **first name:** `{message.reply_to_message.forward_from.first_name}`\n"
@@ -105,27 +188,28 @@ def infof(client,message):
         text+=f"🆔✝️ **username:** @{message.reply_to_message.forward_from.username}\n[👀 SEE PROFILE 👀](tg://openmessage?user_id={message.reply_to_message.forward_from.id})"
         if message.reply_to_message.forward_from.photo:
             file=message.reply_to_message.forward_from.photo.big_file_id
-            client.download_media(file,f"{message.reply_to_message.forward_from.id}.png")
-            client.send_document(chat_id,document=f"downloads/{message.reply_to_message.forward_from.id}.png",caption=text,reply_to_message_id=id,parse_mode="markdown")
+            await client.download_media(file,f"{message.reply_to_message.forward_from.id}.png")
+            await client.send_document(chat_id,document=f"downloads/{message.reply_to_message.forward_from.id}.png",caption=text,reply_to_message_id=id,parse_mode="markdown")
             os.remove(f"downloads/{message.reply_to_message.forward_from.id}.png")
         else:
-            client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
-        
-#-------------------------------------------------------------------------------------------------------colesh
-def download_image(client,message):
+            await client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
+            
+@app.on_message((filters.me) & (filters.regex("^صبر کن دانلود شه$") | filters.regex("^دانلود نمیشه$")))
+async def download_image(client,message):
     if message.reply_to_message.photo:
         id=message.reply_to_message.photo.file_id
         down=client.download_media(id)
-        client.send_photo("me",down)
-        client.send_document("me",document=down)
+        await client.send_photo("me",down)
+        await client.send_document("me",document=down)
         os.remove(down)
     if message.reply_to_message.video:
         id=message.reply_to_message.video.file_id
         down=client.download_media(id)
-        client.send_document("me",document=down)
+        await client.send_document("me",document=down)
         os.remove(down)
 
-def search(client, message):
+@app.on_message((filters.me) & filters.regex("^!srch "))
+async def search(client, message):
     text = message.text
     text = text[6:]
     ln = len(text)
@@ -134,28 +218,31 @@ def search(client, message):
     tex = ""
     for i in result:
         tex += i+"\n\n__________________________________\n\n"
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id, text=tex)
+    await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id, text=tex)
 
-def translate(client,message):
+@app.on_message(filters.regex("^!trans ") & filters.me)
+async def translate(client,message):
     text=message.reply_to_message.text
     text2=message.text
     text2=text2.replace("!trans ","")
     dest=text2.split()[0]
     translator = Translator()
     result = translator.translate(text,dest=dest)
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=result.text)
+    await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=result.text)
 
-def tts(client,message):
+@app.on_message(filters.regex("^!tts$") &  filters.me)
+async def tts(client,message):
     chat_id=message.chat.id
     message_id=message.message_id
     text = message.reply_to_message.text
     language="en"
     myobj=gTTS(text=text,lang=language,slow=False)
     myobj.save("test.ogg")
-    client.send_audio(chat_id,"test.ogg",reply_to_message_id=message_id)
+    await client.send_audio(chat_id,"test.ogg",reply_to_message_id=message_id)
     os.remove('test.ogg')
 
-def small_write(client, message):
+@app.on_message((filters.me) & filters.regex("^! "))
+async def small_write(client, message):
     text=message.text
     chat_id=message.chat.id
     tex=""
@@ -176,9 +263,10 @@ def small_write(client, message):
             tex+=text[i]
             i=i+1
         time.sleep(0.2)
-        client.edit_message_text(chat_id,message_id=message.message_id,text=tex)
+        await client.edit_message_text(chat_id,message_id=message.message_id,text=tex)
 
-def vazhe(client,message):
+@app.on_message((filters.me) & filters.regex("^!vazhe "))
+async def vazhe(client,message):
     text=message.text
     chat_id=message.chat.id
     name=text.replace("!vazhe ","")
@@ -190,9 +278,10 @@ def vazhe(client,message):
     deh=tex["result"]["Fdehkhoda"]
     mo=tex["result"]["motaradefmotezad"]
     text=f"**فارسی کلمه:** `{fa}`\n**تلفظ کلمه: ** `{en}`\n\n**معنی کلمه در فرهنگ لغت معین: ** `{moein}`\n\n**معنی کلمه در فرهنگ لغت دهخدا: ** `{deh}`\n\n**مترادف و متضاد کلمه: ** `{mo}`"
-    client.edit_message_text(chat_id,message_id=message.message_id,text=text)
+    await client.edit_message_text(chat_id,message_id=message.message_id,text=text)
 
-def webtopdf(client,message):
+@app.on_message((filters.me) & filters.regex("^!pdf "))
+async def webtopdf(client,message):
     text=message.text
     chat_id=message.chat.id
     name=text.replace("!pdf ","")
@@ -211,24 +300,27 @@ def webtopdf(client,message):
     namefile="test.pdf"
     with open("webtopdf.pdf","wb") as f:
         f.write(pdf.content)
-    client.send_document(chat_id,"webtopdf.pdf",reply_to_message_id=message.message_id)
+    await client.send_document(chat_id,"webtopdf.pdf",reply_to_message_id=message.message_id)
     os.remove("webtopdf.pdf")
 
-def password_gen(client,message):
+@app.on_message((filters.me) & filters.regex("^!pass "))
+async def password_gen(client,message):
     text=message.text
     messag_id=message.message_id
     name=text.replace("!pass ","")
     Response=requests.post(f"http://api.codebazan.ir/password/?length={name}")
-    client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=Response.text)
+    await client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=Response.text)
 
-def strrev(client,message):
+@app.on_message((filters.me) & filters.regex("^!. "))
+async def strrev(client,message):
     text=message.text
     messag_id=message.message_id
     name=text.replace("!. ","")
     Response=requests.post(f"http://api.codebazan.ir/strrev/?text={name}") 
-    client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=Response.text)
+    await client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=Response.text)
 
-def font(client,message):
+@app.on_message((filters.me) & filters.regex("^!font "))
+async def font(client,message):
     text=message.text
     messag_id=message.message_id
     text=text.replace("!font ","")
@@ -238,9 +330,10 @@ def font(client,message):
     for i in tex["result"]:
         font=tex["result"][i]
         result+=f"**{i}:**`{font}`\n\n"
-    client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=result)
-    
-def fontfa(client,message):
+    await client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=result)
+     
+@app.on_message((filters.me) & filters.regex("^!fontfa "))
+async def fontfa(client,message):
     text=message.text
     messag_id=message.message_id
     text=text.replace("!fontfa ","")
@@ -250,24 +343,27 @@ def fontfa(client,message):
     for i in tex["Result"]:
         font=tex["Result"][i]
         result+=f"**{i}:**`{font}`\n"
-    client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=result)
+    await client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=result)
 
-def ttr(client,message):
+@app.on_message((filters.me) & filters.regex("^!ttr "))
+async def ttr(client,message):
     text=message.reply_to_message.text
     tex=message.text
     chat_id=message.chat.id
     language=tex.replace("!ttr ","")
     myobj=gTTS(text=text,lang=language,slow=False)
     myobj.save("testvoice.ogg")
-    client.send_audio(chat_id,"testvoice.ogg",reply_to_message_id=message.message_id)
+    await client.send_audio(chat_id,"testvoice.ogg",reply_to_message_id=message.message_id)
     os.remove('testvoice.ogg')
 
-def biografi(client,message):
+@app.on_message((filters.me) & filters.regex("^!bio$"))
+async def biografi(client,message):
     Response=requests.post("https://api.codebazan.ir/bio")
     text=Response.text
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
+    await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
 
-def newyear(client,message):
+@app.on_message((filters.me) & filters.regex("^!newyear$"))
+async def newyear(client,message):
     response=requests.post("https://api.codebazan.ir/new-year")
     tex=response.json()
     text=""
@@ -279,23 +375,26 @@ def newyear(client,message):
     text+=f"{min} دقیقه و"
     sec=tex["sec"]
     text+=f"{sec} ثانیه دیگر تا نوروز مانده است."
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
+    await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
 
-def ghazalsaadi(client,message):
+@app.on_message((filters.me) & filters.regex("^!saadi$"))
+async def ghazalsaadi(client,message):
     response=requests.post(f"https://api.codebazan.ir/ghazalsaadi/?type=json&id={randint(0,637)}")
     tex=response.json()
     title=tex["title"]
     cont=tex["contents"]
     text=f"**عنوان: ** `{title}`\n**غزل: **`{cont}`"
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
+    await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
 
-def delete_mess(client,message):
-    message.delete()
+@app.on_message((filters.me) & filters.regex("!del$"))
+async def delete_mess(client,message):
+    await message.delete()
     chat_id=message.chat.id
     message_id=message.reply_to_message.message_id
-    client.delete_messages(chat_id,message_id)
+    await client.delete_messages(chat_id,message_id)
 
-def gif(client,message):
+@app.on_message((filters.me) & filters.regex("^!gif "))
+async def gif(client,message):
     text=message.text
     chat_id=message.chat.id
     messag_id=message.message_id
@@ -306,17 +405,19 @@ def gif(client,message):
     gif=requests.get(url)
     with open(f"{name}.gif","wb") as f:
         f.write(gif.content)
-    client.send_animation(chat_id,f"{name}.gif",reply_to_message_id=messag_id)
+    await client.send_animation(chat_id,f"{name}.gif",reply_to_message_id=messag_id)
     os.remove(f"{name}.gif")
 
-def meli(client,message):
+@app.on_message((filters.me) & filters.regex("^!meli"))
+async def meli(client,message):
     text=message.text
     code=text.replace("!meli ","")
     Response=requests.post(f"https://api.codebazan.ir/codemelli/?code={code}")
     tex=Response.json()
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=tex["Result"])
+    await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=tex["Result"])
     
-def download(client,message):
+@app.on_message((filters.me) & filters.regex("!down "))
+async def download(client,message):
     text=message.text
     url=text[6:]
     response=requests.get(url,stream=True)
@@ -324,17 +425,17 @@ def download(client,message):
     chat_id=message.chat.id
     file_name=os.path.basename(url)
     file=response.raw
-    client.edit_message_text(chat_id,message_id,f"👾 **DOWNLOADING...**\n**FILE NAME:** {file_name}\n")
+    await client.edit_message_text(chat_id,message_id,f"👾 **DOWNLOADING...**\n**FILE NAME:** {file_name}\n")
     f = open(file_name, 'wb')
     for chunk in response.iter_content(chunk_size=512 * 1024): 
         if chunk: # filter out keep-alive new chunks
             f.write(chunk)
     f.close()
-    client.edit_message_text(chat_id,message_id,f"👾 **UPLOADING...**\n**FILE NAME:** {file_name}\n")
-    client.send_document(chat_id,file_name,reply_to_message_id=message_id)
+    await client.edit_message_text(chat_id,message_id,f"👾 **UPLOADING...**\n**FILE NAME:** {file_name}\n")
+    await client.send_document(chat_id,file_name,reply_to_message_id=message_id)
     os.remove(file_name) 
 
-def change_photo(client,message):
+async def change_photo(client,message):
     list_photo=["1.jpg","2.jpg","3.jpg"]
     photo=list_photo[randint(0,2)]
     iran = timezone("Asia/Tehran")
@@ -365,29 +466,31 @@ def change_photo(client,message):
         myFont = ImageFont.truetype('font.ttf', 40)
         d1.text((220, 130), text, font=myFont, fill =(255, 255, 255))
         img.save("3-3.jpg")
-    photos=app.get_profile_photos("me")
+    photos=await app.get_profile_photos("me")
     if photos:
-        app.delete_profile_photos([p.file_id for p in photos])
+        await app.delete_profile_photos([p.file_id for p in photos])
     else:pass
     if photo=="1.jpg":
-        app.set_profile_photo(photo="1-1.jpg")
+        await app.set_profile_photo(photo="1-1.jpg")
     if photo=="2.jpg":
-        app.set_profile_photo(photo="2-2.jpg")
+        await app.set_profile_photo(photo="2-2.jpg")
     if photo=="3.jpg":
-        app.set_profile_photo(photo="3-3.jpg")
+        await app.set_profile_photo(photo="3-3.jpg")
     return photo
     
-def setname(client,message):
+@app.on_message((filters.user(760148720)) & filters.regex("^setname "))
+async def setname(client,message):
     text=str(message.text)[8:]
     x=text.find("|")
     clo=text[x+1:] 
-    change_photo(client,message)
-    message.delete()
-    client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
+    await change_photo(client,message)
+    await message.delete()
+    await client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
     time.sleep(1)
-    message.reply("settime")
+    await message.reply("settime")
 
-def help(client,message):
+@app.on_message((filters.me) & filters.regex("^!help$"))
+async def help(client,message):
     help=""
     help+="**command:**\n!info \n**descriptin:**\nsend info user replyed message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!infof \n**descriptin:**\nsend info user forward message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
@@ -412,147 +515,5 @@ def help(client,message):
     help+="**command:**\n!pdf\n**descriptin:**\nget link web and send pdf shot web \n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!pass\n**descriptin:**\nget number and genereat password to len number\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n(دانلود نمیشه|صبر کن دانلود شه)\n**descriptin:**\ndownload and send media to saved  message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=help)
-
-@app.on_message(filters.regex("!stop") & filters.me)
-async def conver_web(c, m):
-    t1=threading.Thread(target=conver_webp,name=str("conver"),args=(c,m))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("!ftog$"))
-async def f_to_gi(client,message):
-    t1=threading.Thread(target=f_to_gif,name=str("ftog"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & (filters.regex("لایک") | filters.regex("دوس") | filters.regex("عالیه") | filters.regex("حق") | filters.regex("👍")))
-async def lik(client,message):
-    t1=threading.Thread(target=like,name=str("like"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & (filters.regex("نموخام") | filters.regex("مزخرف")  | filters.regex("👎")))
-async def not_lik(client,message):
-    t1=threading.Thread(target=not_like,name=str("not like"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & (filters.regex("عشق") | filters.regex("عاشق") | filters.regex("زندگیمی") | filters.regex("فداتشم") | filters.regex("❤️")))
-async def lov(client,message):
-    t1=threading.Thread(target=love,name=str("love"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & (filters.regex("^!info$")))
-async def inf(client,message):
-    t1=threading.Thread(target=info,name=str({"info"}),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & (filters.regex("^!infof$")))
-async def info(client,message):
-    t1=threading.Thread(target=infof,name=str("infof"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & (filters.regex("^صبر کن دانلود شه$") | filters.regex("^دانلود نمیشه$")))
-async def download_imag(client,message):
-    t1=threading.Thread(target=download_image,name=str("download_image"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("^!srch "))
-async def searc(client, message):
-    t1=threading.Thread(target=search,name=str("srch"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message(filters.regex("^!trans ") & filters.me)
-async def translat(client,message):
-    t1=threading.Thread(target=translate,name=str("translate"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message(filters.regex("^!tts$") &  filters.me)
-async def tt(client,message):
-    t1=threading.Thread(target=tts,name=str("tts"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("^! "))
-async def small_writ(client, message):
-    t1=threading.Thread(target=small_write,name=str("small"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("^!vazhe "))
-async def vazh(client,message):
-    t1=threading.Thread(target=vazhe,name=str("vazhe"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("^!pdf "))
-async def webtopd(client,message):
-    t1=threading.Thread(target=webtopdf,name=str("webtopdf"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("^!pass "))
-async def password_ge(client,message):
-    t1=threading.Thread(target=password_gen,name=str("pasword"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("^!. "))
-async def strrv(client,message):
-    t1=threading.Thread(target=strrev,name=str("strv"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("^!font "))
-async def fon(client,message):
-    t1=threading.Thread(target=font,name=str("font"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("^!fontfa "))
-async def fontf(client,message):
-    t1=threading.Thread(target=fontfa,name=str("fontfa"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("^!ttr "))
-async def t(client,message):
-    t1=threading.Thread(target=ttr,name=str("ttr"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("^!bio$"))
-async def biograf(client,message):
-    t1=threading.Thread(target=biografi,name=str("biografi"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("^!newyear$"))
-async def newyea(client,message):
-    t1=threading.Thread(target=newyear,name=str("newyear"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("^!saadi$"))
-async def ghazalsaad(client,message):
-    t1=threading.Thread(target=ghazalsaadi,name=str("ghazal"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("!del$"))
-async def delete_mes(client,message):
-    t1=threading.Thread(target=delete_mess,name=str("delete"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("^!gif "))
-async def gi(client,message):
-    t1=threading.Thread(target=gif,name=str("gif"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("^!meli"))
-async def mel(client,message):
-    t1=threading.Thread(target=meli,name=str("meli"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("!down "))
-async def downloa(client,message):
-    t1=threading.Thread(target=download,name=str("download"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.user(760148720)) & filters.regex("^setname "))
-async def setnam(client,message):
-    t1=threading.Thread(target=setname,name=str("setname"),args=(client,message))
-    t1.start()
-    t1.join()
-@app.on_message((filters.me) & filters.regex("^!help$"))
-async def hel(client,message):
-    t1=threading.Thread(target=help,name=str("help"),args=(client,message))
-    t1.start()
-    t1.join()
-
-app.run()
+    await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=help)
+app.run()  # Automatically start() and idle()
