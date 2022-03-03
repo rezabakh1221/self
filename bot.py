@@ -11,33 +11,33 @@ from pytz import timezone
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
 class bot(threading.Thread):
     #-------------------------------------------------------------------------------------stop
-    async def conver_webp(c, m):
+    def conver_webp(c, m):
         chat_id=m.chat.id
         message_id=m.message_id
         id=m.reply_to_message.message_id
         if (m.reply_to_message.sticker.is_animated) == False:
-            await m.delete()
+            m.delete()
             file=m.reply_to_message.sticker.file_id
             down=c.download_media(file,"sticker.webp")
             img = Image.open('downloads/sticker.webp').convert("RGBA")
             img.save("image.png","PNG")
-            await c.send_photo(chat_id,"image.png",reply_to_message_id=id)
-            await c.send_document(chat_id,document="image.png",reply_to_message_id=id)
+            c.send_photo(chat_id,"image.png",reply_to_message_id=id)
+            c.send_document(chat_id,document="image.png",reply_to_message_id=id)
             os.remove("image.png")
             os.remove('downloads/sticker.webp')
         else:
-            await c.edit_message_text(chat_id, message_id,"opps...\nthis sticker is animated\nme can convert the stickers that are not animated🥺\n")
+            c.edit_message_text(chat_id, message_id,"opps...\nthis sticker is animated\nme can convert the stickers that are not animated🥺\n")
     #-------------------------------------------------------------------------------------ftog
     def thumbnails(frames,size):
         for frame in frames:
             thumbnail = frame.copy()
             thumbnail.thumbnail(size, Image.ANTIALIAS)
             yield thumbnail
-    async def f_to_gif(client,message):
+    def f_to_gif(client,message):
         chat_id=message.chat.id
         file_id=message.reply_to_message.message_id
         id=message.reply_to_message.video.file_id
-        await message.delete()
+        message.delete()
         down=client.download_media(id)
         clip=VideoFileClip(down)
         clip.write_gif("nowgif.gif")
@@ -48,32 +48,32 @@ class bot(threading.Thread):
         om = next(frames) # Handle first frame separately
         om.info = im.info # Copy sequence info
         om.save("nowgif.gif", save_all=True, append_images=list(frames))
-        await client.send_animation(chat_id,"nowgif.gif",reply_to_message_id=file_id)
+        client.send_animation(chat_id,"nowgif.gif",reply_to_message_id=file_id)
         os.remove(down)
         os.remove("nowgif.gif")
     #------------------------------------------------------------------------------------kos
-    async def like(client,message):
+    def like(client,message):
         if message.reply_to_message:
             chat_id=message.chat.id
             message_id=message.reply_to_message.message_id
-            await client.send_reaction(chat_id,message_id,"👍")
+            client.send_reaction(chat_id,message_id,"👍")
 
-    async def not_like(client,message):
+    def not_like(client,message):
         if message.reply_to_message:
             chat_id=message.chat.id
             message_id=message.reply_to_message.message_id
-            await client.send_reaction(chat_id,message_id,"👎")
+            client.send_reaction(chat_id,message_id,"👎")
 
-    async def love(client,message):
+    def love(client,message):
         if message.reply_to_message:
             chat_id=message.chat.id
             message_id=message.reply_to_message.message_id
-            await client.send_reaction(chat_id,message_id,"❤️")
+            client.send_reaction(chat_id,message_id,"❤️")
 
     #---------------------------------------------------------------------------------------info & infof
-    async def info(client,message):
+    def info(client,message):
         chat_id=message.chat.id
-        await message.delete()
+        message.delete()
         id=message.reply_to_message.message_id
         text=f"**INFO USER**\n🆔✝️ **message id :** `{id}`\n"
         text+=f"🆔 **id:** `{message.reply_to_message.from_user.id}`\n📝 **is contact:** `{message.reply_to_message.from_user.is_contact}`\n"
@@ -83,20 +83,20 @@ class bot(threading.Thread):
         text+=f"🆔✝️ **username:** @{message.reply_to_message.from_user.username}\n[👀 SEE PROFILE 👀](tg://openmessage?user_id={message.reply_to_message.from_user.id})"
         if message.reply_to_message.from_user.photo:
             file=message.reply_to_message.from_user.photo.big_file_id
-            await client.download_media(file,f"{message.reply_to_message.from_user.id}.png")
-            await client.send_document(chat_id,document=f"downloads/{message.reply_to_message.from_user.id}.png",caption=text,reply_to_message_id=id,parse_mode="markdown")
+            client.download_media(file,f"{message.reply_to_message.from_user.id}.png")
+            client.send_document(chat_id,document=f"downloads/{message.reply_to_message.from_user.id}.png",caption=text,reply_to_message_id=id,parse_mode="markdown")
             os.remove(f"downloads/{message.reply_to_message.from_user.id}.png")
         else:
-            await client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
+            client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
 
-    async def infof(client,message):
+    def infof(client,message):
         chat_id=message.chat.id
-        await message.delete()
+        message.delete()
         id=message.reply_to_message.message_id
         text=f"**INFO FROM USER**\n🆔✝️ **message id :** `{id}`\n"
         if message.reply_to_message.forward_sender_name:
             text+=f"❌🔒 ooppsss... 🔒❌\nthe sender of this message has locked his profile.\n🔏 **name sender message :** `{message.reply_to_message.forward_sender_name}`\n"
-            await client.send_message(chat_id,text,reply_to_message_id=id)
+            client.send_message(chat_id,text,reply_to_message_id=id)
         else:
             text+=f"🆔 **id:** `{message.reply_to_message.forward_from.id}`\n📝 **is contact:** `{message.reply_to_message.forward_from.is_contact}`\n"
             text+=f"✏️ **first name:** `{message.reply_to_message.forward_from.first_name}`\n"
@@ -105,27 +105,27 @@ class bot(threading.Thread):
             text+=f"🆔✝️ **username:** @{message.reply_to_message.forward_from.username}\n[👀 SEE PROFILE 👀](tg://openmessage?user_id={message.reply_to_message.forward_from.id})"
             if message.reply_to_message.forward_from.photo:
                 file=message.reply_to_message.forward_from.photo.big_file_id
-                await client.download_media(file,f"{message.reply_to_message.forward_from.id}.png")
-                await client.send_document(chat_id,document=f"downloads/{message.reply_to_message.forward_from.id}.png",caption=text,reply_to_message_id=id,parse_mode="markdown")
+                client.download_media(file,f"{message.reply_to_message.forward_from.id}.png")
+                client.send_document(chat_id,document=f"downloads/{message.reply_to_message.forward_from.id}.png",caption=text,reply_to_message_id=id,parse_mode="markdown")
                 os.remove(f"downloads/{message.reply_to_message.forward_from.id}.png")
             else:
-                await client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
+                client.send_message(chat_id,text,reply_to_message_id=id,parse_mode="markdown")
             
     #-------------------------------------------------------------------------------------------------------colesh
-    async def download_image(client,message):
+    def download_image(client,message):
         if message.reply_to_message.photo:
             id=message.reply_to_message.photo.file_id
             down=client.download_media(id)
-            await client.send_photo("me",down)
-            await client.send_document("me",document=down)
+            client.send_photo("me",down)
+            client.send_document("me",document=down)
             os.remove(down)
         if message.reply_to_message.video:
             id=message.reply_to_message.video.file_id
             down=client.download_media(id)
-            await client.send_document("me",document=down)
+            client.send_document("me",document=down)
             os.remove(down)
 
-    async def search(client, message):
+    def search(client, message):
         text = message.text
         text = text[6:]
         ln = len(text)
@@ -134,28 +134,28 @@ class bot(threading.Thread):
         tex = ""
         for i in result:
             tex += i+"\n\n__________________________________\n\n"
-        await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id, text=tex)
+        client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id, text=tex)
 
-    async def translate(client,message):
+    def translate(client,message):
         text=message.reply_to_message.text
         text2=message.text
         text2=text2.replace("!trans ","")
         dest=text2.split()[0]
         translator = Translator()
         result = translator.translate(text,dest=dest)
-        await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=result.text)
+        client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=result.text)
 
-    async def tts(client,message):
+    def tts(client,message):
         chat_id=message.chat.id
         message_id=message.message_id
         text = message.reply_to_message.text
         language="en"
         myobj=gTTS(text=text,lang=language,slow=False)
         myobj.save("test.ogg")
-        await client.send_audio(chat_id,"test.ogg",reply_to_message_id=message_id)
+        client.send_audio(chat_id,"test.ogg",reply_to_message_id=message_id)
         os.remove('test.ogg')
 
-    async def small_write(client, message):
+    def small_write(client, message):
         text=message.text
         chat_id=message.chat.id
         tex=""
@@ -176,9 +176,9 @@ class bot(threading.Thread):
                 tex+=text[i]
                 i=i+1
             time.sleep(0.2)
-            await client.edit_message_text(chat_id,message_id=message.message_id,text=tex)
+            client.edit_message_text(chat_id,message_id=message.message_id,text=tex)
 
-    async def vazhe(client,message):
+    def vazhe(client,message):
         text=message.text
         chat_id=message.chat.id
         name=text.replace("!vazhe ","")
@@ -190,9 +190,9 @@ class bot(threading.Thread):
         deh=tex["result"]["Fdehkhoda"]
         mo=tex["result"]["motaradefmotezad"]
         text=f"**فارسی کلمه:** `{fa}`\n**تلفظ کلمه: ** `{en}`\n\n**معنی کلمه در فرهنگ لغت معین: ** `{moein}`\n\n**معنی کلمه در فرهنگ لغت دهخدا: ** `{deh}`\n\n**مترادف و متضاد کلمه: ** `{mo}`"
-        await client.edit_message_text(chat_id,message_id=message.message_id,text=text)
+        client.edit_message_text(chat_id,message_id=message.message_id,text=text)
 
-    async def webtopdf(client,message):
+    def webtopdf(client,message):
         text=message.text
         chat_id=message.chat.id
         name=text.replace("!pdf ","")
@@ -211,24 +211,24 @@ class bot(threading.Thread):
         namefile="test.pdf"
         with open("webtopdf.pdf","wb") as f:
             f.write(pdf.content)
-        await client.send_document(chat_id,"webtopdf.pdf",reply_to_message_id=message.message_id)
+        client.send_document(chat_id,"webtopdf.pdf",reply_to_message_id=message.message_id)
         os.remove("webtopdf.pdf")
 
-    async def password_gen(client,message):
+    def password_gen(client,message):
         text=message.text
         messag_id=message.message_id
         name=text.replace("!pass ","")
         Response=requests.post(f"http://api.codebazan.ir/password/?length={name}")
-        await client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=Response.text)
+        client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=Response.text)
 
-    async def strrev(client,message):
+    def strrev(client,message):
         text=message.text
         messag_id=message.message_id
         name=text.replace("!. ","")
         Response=requests.post(f"http://api.codebazan.ir/strrev/?text={name}") 
-        await client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=Response.text)
+        client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=Response.text)
 
-    async def font(client,message):
+    def font(client,message):
         text=message.text
         messag_id=message.message_id
         text=text.replace("!font ","")
@@ -238,9 +238,9 @@ class bot(threading.Thread):
         for i in tex["result"]:
             font=tex["result"][i]
             result+=f"**{i}:**`{font}`\n\n"
-        await client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=result)
+        client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=result)
         
-    async def fontfa(client,message):
+    def fontfa(client,message):
         text=message.text
         messag_id=message.message_id
         text=text.replace("!fontfa ","")
@@ -250,24 +250,24 @@ class bot(threading.Thread):
         for i in tex["Result"]:
             font=tex["Result"][i]
             result+=f"**{i}:**`{font}`\n"
-        await client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=result)
+        client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=result)
 
-    async def ttr(client,message):
+    def ttr(client,message):
         text=message.reply_to_message.text
         tex=message.text
         chat_id=message.chat.id
         language=tex.replace("!ttr ","")
         myobj=gTTS(text=text,lang=language,slow=False)
         myobj.save("testvoice.ogg")
-        await client.send_audio(chat_id,"testvoice.ogg",reply_to_message_id=message.message_id)
+        client.send_audio(chat_id,"testvoice.ogg",reply_to_message_id=message.message_id)
         os.remove('testvoice.ogg')
 
-    async def biografi(client,message):
+    def biografi(client,message):
         Response=requests.post("https://api.codebazan.ir/bio")
         text=Response.text
-        await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
+        client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
 
-    async def newyear(client,message):
+    def newyear(client,message):
         response=requests.post("https://api.codebazan.ir/new-year")
         tex=response.json()
         text=""
@@ -279,23 +279,23 @@ class bot(threading.Thread):
         text+=f"{min} دقیقه و"
         sec=tex["sec"]
         text+=f"{sec} ثانیه دیگر تا نوروز مانده است."
-        await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
+        client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
 
-    async def ghazalsaadi(client,message):
+    def ghazalsaadi(client,message):
         response=requests.post(f"https://api.codebazan.ir/ghazalsaadi/?type=json&id={randint(0,637)}")
         tex=response.json()
         title=tex["title"]
         cont=tex["contents"]
         text=f"**عنوان: ** `{title}`\n**غزل: **`{cont}`"
-        await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
+        client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
 
-    async def delete_mess(client,message):
-        await message.delete()
+    def delete_mess(client,message):
+        message.delete()
         chat_id=message.chat.id
         message_id=message.reply_to_message.message_id
-        await client.delete_messages(chat_id,message_id)
+        client.delete_messages(chat_id,message_id)
 
-    async def gif(client,message):
+    def gif(client,message):
         text=message.text
         chat_id=message.chat.id
         messag_id=message.message_id
@@ -306,17 +306,17 @@ class bot(threading.Thread):
         gif=requests.get(url)
         with open(f"{name}.gif","wb") as f:
             f.write(gif.content)
-        await client.send_animation(chat_id,f"{name}.gif",reply_to_message_id=messag_id)
+        client.send_animation(chat_id,f"{name}.gif",reply_to_message_id=messag_id)
         os.remove(f"{name}.gif")
 
-    async def meli(client,message):
+    def meli(client,message):
         text=message.text
         code=text.replace("!meli ","")
         Response=requests.post(f"https://api.codebazan.ir/codemelli/?code={code}")
         tex=Response.json()
-        await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=tex["Result"])
+        client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=tex["Result"])
         
-    async def download(client,message):
+    def download(client,message):
         text=message.text
         url=text[6:]
         response=requests.get(url,stream=True)
@@ -324,17 +324,17 @@ class bot(threading.Thread):
         chat_id=message.chat.id
         file_name=os.path.basename(url)
         file=response.raw
-        await client.edit_message_text(chat_id,message_id,f"👾 **DOWNLOADING...**\n**FILE NAME:** {file_name}\n")
+        client.edit_message_text(chat_id,message_id,f"👾 **DOWNLOADING...**\n**FILE NAME:** {file_name}\n")
         f = open(file_name, 'wb')
         for chunk in response.iter_content(chunk_size=512 * 1024): 
             if chunk: # filter out keep-alive new chunks
                 f.write(chunk)
         f.close()
-        await client.edit_message_text(chat_id,message_id,f"👾 **UPLOADING...**\n**FILE NAME:** {file_name}\n")
-        await client.send_document(chat_id,file_name,reply_to_message_id=message_id)
+        client.edit_message_text(chat_id,message_id,f"👾 **UPLOADING...**\n**FILE NAME:** {file_name}\n")
+        client.send_document(chat_id,file_name,reply_to_message_id=message_id)
         os.remove(file_name) 
 
-    async def change_photo(client,message):
+    def change_photo(client,message):
         list_photo=["1.jpg","2.jpg","3.jpg"]
         photo=list_photo[randint(0,2)]
         iran = timezone("Asia/Tehran")
@@ -365,29 +365,29 @@ class bot(threading.Thread):
             myFont = ImageFont.truetype('font.ttf', 40)
             d1.text((220, 130), text, font=myFont, fill =(255, 255, 255))
             img.save("3-3.jpg")
-        photos=await app.get_profile_photos("me")
+        photos=app.get_profile_photos("me")
         if photos:
-            await app.delete_profile_photos([p.file_id for p in photos])
+            app.delete_profile_photos([p.file_id for p in photos])
         else:pass
         if photo=="1.jpg":
-            await app.set_profile_photo(photo="1-1.jpg")
+            app.set_profile_photo(photo="1-1.jpg")
         if photo=="2.jpg":
-            await app.set_profile_photo(photo="2-2.jpg")
+            app.set_profile_photo(photo="2-2.jpg")
         if photo=="3.jpg":
-            await app.set_profile_photo(photo="3-3.jpg")
+            app.set_profile_photo(photo="3-3.jpg")
         return photo
         
-    async def setname(client,message):
+    def setname(client,message):
         text=str(message.text)[8:]
         x=text.find("|")
         clo=text[x+1:] 
-        await bot.change_photo(client,message)
-        await message.delete()
-        await client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
+        bot.change_photo(client,message)
+        message.delete()
+        client.update_profile(first_name=text,bio=f"○━━─  {clo} •͜•   ──⇆○")
         time.sleep(1)
-        await message.reply("settime")
+        message.reply("settime")
 
-    async def help(client,message):
+    def help(client,message):
         help=""
         help+="**command:**\n!info \n**descriptin:**\nsend info user replyed message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
         help+="**command:**\n!infof \n**descriptin:**\nsend info user forward message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
@@ -412,7 +412,7 @@ class bot(threading.Thread):
         help+="**command:**\n!pdf\n**descriptin:**\nget link web and send pdf shot web \n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
         help+="**command:**\n!pass\n**descriptin:**\nget number and genereat password to len number\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
         help+="**command:**\n(دانلود نمیشه|صبر کن دانلود شه)\n**descriptin:**\ndownload and send media to saved  message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-        await client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=help)
+        client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=help)
 
 @app.on_message(filters.regex("!stop") & filters.me)
 async def conver_webp(c, m):
@@ -554,4 +554,5 @@ async def help(client,message):
     t1=threading.Thread(target=bot.help,name=str("help"),args=(client,message))
     t1.start()
     t1.join()
+
 app.run()
