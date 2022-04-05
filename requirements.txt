@@ -13,3 +13,4 @@ lottie
 cairosvg
 pytz
 pytube
+speedtest
