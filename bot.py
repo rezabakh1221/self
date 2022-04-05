@@ -12,7 +12,7 @@ from PIL import Image, ImageSequence
 from pytube import YouTube
 
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
-@app.on_message(filters.group & filters.regex("^(s|S)peed$"))
+@app.on_message(filters.me & filters.regex("^(s|S)peed$"))
 def speedtestsw(client,message):
     speed = speedtest.Speedtest()
     down=round(speed.download()/1024/1024)
