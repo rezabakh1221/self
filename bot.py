@@ -2,7 +2,7 @@ from pyrogram import Client,filters
 from random import randint
 from gtts import gTTS
 import requests,time,shutil
-import os
+import os,speedtest
 from googletrans import Translator
 from typing import Text
 import googlesearch
@@ -12,7 +12,13 @@ from PIL import Image, ImageSequence
 from pytube import YouTube
 
 app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
-
+@app.on_message(filters.group & filters.regex("^(s|S)peed$"))
+def speedtestsw(client,message):
+    speed = speedtest.Speedtest()
+    down=round(speed.download()/1024/1024)
+    upl=round(speed.upload()/1024/1024)
+    text=f"Download speed: {down} Mb/s\nUpload speed: {upl} Mb/s"
+    message.reply(text)
 @app.on_message(filters.regex("!stop") & filters.me)
 def conver_webp(c, m):
     chat_id=m.chat.id
