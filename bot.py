@@ -244,9 +244,14 @@ def search(client, message):
             tex += text[i]
     result = googlesearch.search(tex, num_results=20)
     tex = ""
+    der=1
     for i in result:
-        tex += i+"\n\n__________________________________\n\n"
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id, text=tex)
+        response=requests.get(i).text
+        x=response.find("<title>")
+        y=response.find("</title>",x)
+        link=response[x+7:y]
+        tex +=f"{der} ➖ [{link}]({i})➰\n"
+    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id, text=tex,parse_mode="markdown")
 
 @app.on_message(filters.regex("^!trans ") & filters.me)
 def translate(client,message):
