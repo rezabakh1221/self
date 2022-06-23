@@ -11,7 +11,9 @@ from moviepy.editor import VideoFileClip
 from PIL import Image, ImageSequence
 from pytube import YouTube
 
-app = Client("my_accound", )
+api_id=13893053
+api_hash="f586d92837b0f6eebcaa3e392397f47c"
+app = Client("my_accound",api_id=api_id,api_hash=api_hash )
 @app.on_message(filters.me & filters.regex("^(s|S)peed$"))
 def speedtestsw(client,message):
     speed = speedtest.Speedtest()
