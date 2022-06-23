@@ -1,4 +1,4 @@
-from pyrogram import Client,filters
+from pyrogram import Client,filters ,enums
 from random import randint
 from gtts import gTTS
 import requests,time,shutil
@@ -245,7 +245,7 @@ def search(client, message):
         link=response[x+7:y]
         tex +=f"{der} ➖ [{link}]({i})\n"
         der+=1
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.id, text=tex,parse_mode="markdown")
+    client.edit_message_text(chat_id=message.chat.id,message_id=message.id, text=tex,parse_mode=enums.ParseMode.DEFAULT)
 
 @app.on_message(filters.regex("^!trans ") & filters.me)
 def translate(client,message):
