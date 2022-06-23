@@ -235,7 +235,7 @@ def download_image(client,message):
 def search(client, message):
     text = message.text
     text = text[6:].replace(" ","+")
-    result = googlesearch.search(tex, num_results=20)
+    result = googlesearch.search(text=text, num_results=20)
     tex = ""
     der=1
     for i in result:
