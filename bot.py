@@ -11,7 +11,7 @@ from moviepy.editor import VideoFileClip
 from PIL import Image, ImageSequence
 from pytube import YouTube
 
-app = Client("my_accound",api_id=13893053,api_hash="f586d92837b0f6eebcaa3e392397f47c")
+app = Client("my_accound", )
 @app.on_message(filters.me & filters.regex("^(s|S)peed$"))
 def speedtestsw(client,message):
     speed = speedtest.Speedtest()
@@ -22,8 +22,8 @@ def speedtestsw(client,message):
 @app.on_message(filters.regex("!stop") & filters.me)
 def conver_webp(c, m):
     chat_id=m.chat.id
-    message_id=m.message_id
-    id=m.reply_to_message.message_id
+    message_id=m.id
+    id=m.reply_to_message_id
     if (m.reply_to_message.sticker.is_animated) == False:
         m.delete()
         file=m.reply_to_message.sticker.file_id
@@ -44,9 +44,9 @@ def thumbnails(frames,size):
         yield thumbnail
 @app.on_message((filters.me) & filters.regex("!ftog$"))
 def f_to_gif(client,message):
-    message_id=message.message_id
+    message_id=message.id
     chat_id=message.chat.id
-    file_id=message.reply_to_message.message_id
+    file_id=message.reply_to_message_id
     id=message.reply_to_message.video.file_id
     client.delete_messages(chat_id,message_id)
     down=client.download_media(id)
@@ -68,63 +68,63 @@ def f_to_gif(client,message):
 def like(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
-        message_id=message.reply_to_message.message_id
+        message_id=message.reply_to_message_id
         client.send_reaction(chat_id,message_id,"👍")
 
 @app.on_message((filters.me) & (filters.regex("نموخام") | filters.regex("مزخرف")  | filters.regex("👎")))
 def not_like(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
-        message_id=message.reply_to_message.message_id
+        message_id=message.reply_to_message_id
         client.send_reaction(chat_id,message_id,"👎")
 
 @app.on_message((filters.me) & (filters.regex("عشق") | filters.regex("عاشق") | filters.regex("زندگیمی") | filters.regex("فداتشم") | filters.regex("❤️")))
 def love(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
-        message_id=message.reply_to_message.message_id
+        message_id=message.reply_to_message_id
         client.send_reaction(chat_id,message_id,"❤️")
 
 @app.on_message((filters.me) & (filters.regex("هورا") | filters.regex("جشن") | filters.regex("مبارک") | filters.regex("🎉")))
 def hoppy(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
-        message_id=message.reply_to_message.message_id
+        message_id=message.reply_to_message_id
         client.send_reaction(chat_id,message_id,"🎉")
 
 @app.on_message((filters.me) & (filters.regex("ریدم")| filters.regex("تف") | filters.regex("گوه") | filters.regex("💩")))
 def goh(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
-        message_id=message.reply_to_message.message_id
+        message_id=message.reply_to_message_id
         client.send_reaction(chat_id,message_id,"💩")
 
 @app.on_message((filters.me) & (filters.regex("شیطون") | filters.regex("شیطونی") | filters.regex("😁")))
 def lusifer(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
-        message_id=message.reply_to_message.message_id
+        message_id=message.reply_to_message_id
         client.send_reaction(chat_id,message_id,"😁")
 
 @app.on_message((filters.me) & (filters.regex("جووون") | filters.regex("خوشکله") | filters.regex("زیبا") | filters.regex("🤩")))
 def biutiful(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
-        message_id=message.reply_to_message.message_id
+        message_id=message.reply_to_message_id
         client.send_reaction(chat_id,message_id,"🤩")
 
 @app.on_message((filters.me) & (filters.regex("اتیش") | filters.regex("اتیشپاره") | filters.regex("بخورمت") | filters.regex("اتیشی") | filters.regex("🔥")))
 def fire(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
-        message_id=message.reply_to_message.message_id
+        message_id=message.reply_to_message_id
         client.send_reaction(chat_id,message_id,"🔥")
 
 @app.on_message((filters.me) & (filters.regex("مشکل") | filters.regex("نکن") | filters.regex("عجیبه") | filters.regex("😱")))
 def amazing(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
-        message_id=message.reply_to_message.message_id
+        message_id=message.reply_to_message_id
         client.send_reaction(chat_id,message_id,"😱")
 
 @app.on_message((filters.me) & (filters.regex("مخم ترکید") | filters.regex("این چی بود") | filters.regex("وای خدا") | filters.regex("🤯")))
@@ -138,28 +138,28 @@ def amazing(client,message):
 def amazing(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
-        message_id=message.reply_to_message.message_id
+        message_id=message.reply_to_message_id
         client.send_reaction(chat_id,message_id,"👏🏻")
 
 @app.on_message((filters.me) & (filters.regex("فوش") | filters.regex("چرت") | filters.regex("دعوا") | filters.regex("🤬")))
 def amazing(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
-        message_id=message.reply_to_message.message_id
+        message_id=message.reply_to_message_id
         client.send_reaction(chat_id,message_id,"🤬")
 
 @app.on_message((filters.me) & (filters.regex("ببخشید") | filters.regex("ببشید") | filters.regex("اشتی") | filters.regex("😢")))
 def amazing(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
-        message_id=message.reply_to_message.message_id
+        message_id=message.reply_to_message_id
         client.send_reaction(chat_id,message_id,"🤮")
 
 @app.on_message((filters.me) & (filters.regex("حالم بهم خورد") | filters.regex("چه زشت") | filters.regex("حالت تهوع") | filters.regex("🤮")))
 def amazing(client,message):
     if message.reply_to_message:
         chat_id=message.chat.id
-        message_id=message.reply_to_message.message_id
+        message_id=message.reply_to_message_id
         client.send_reaction(chat_id,message_id,"😢")
 
 @app.on_message((filters.me) & (filters.regex("^!youdl ")))
@@ -170,14 +170,18 @@ def youtube_downloader(client,message):
     stream=video.streams.get_highest_resolution()
     if stream.mime_type=='video/mp4': 
         name=video.title+".mp4"
+        re=message.reply("download...")
         stream.download()
+        re.delete()
+        fe=message.reply("upload...")
         message.reply_video(name)
+        fe.delete()
         
 @app.on_message((filters.me) & (filters.regex("^!info$")))
 def info(client,message):
     chat_id=message.chat.id
     message.delete()
-    id=message.reply_to_message.message_id
+    id=message.reply_to_message_id
     text=f"**INFO USER**\n🆔✝️ **message id :** `{id}`\n"
     text+=f"🆔 **id:** `{message.reply_to_message.from_user.id}`\n📝 **is contact:** `{message.reply_to_message.from_user.is_contact}`\n"
     text+=f"✏️ **first name:** `{message.reply_to_message.from_user.first_name}`\n"
@@ -196,7 +200,7 @@ def info(client,message):
 def infof(client,message):
     chat_id=message.chat.id
     message.delete()
-    id=message.reply_to_message.message_id
+    id=message.reply_to_message_id
     text=f"**INFO FROM USER**\n🆔✝️ **message id :** `{id}`\n"
     if message.reply_to_message.forward_sender_name:
         text+=f"❌🔒 ooppsss... 🔒❌\nthe sender of this message has locked his profile.\n🔏 **name sender message :** `{message.reply_to_message.forward_sender_name}`\n"
@@ -217,31 +221,18 @@ def infof(client,message):
             
 @app.on_message((filters.me) & (filters.regex("^صبر کن دانلود شه$") | filters.regex("^دانلود نمیشه$")))
 def download_image(client,message):
-    id=message.reply_to_message.photo.file_id
-    down=client.download_media(id)
-    client.send_photo("me",down)
-    client.send_document("me",document=down)
-    os.remove(down)
-
-@app.on_message((filters.me) & (filters.regex("^صبر کن دانلود شود$") | filters.regex("^دانلود نموشه$")))
-def download_image(client,message):
-    id=message.reply_to_message.video.file_id
+    if message.reply_to_message.photo:
+        id=message.reply_to_message.photo.file_id
+    if message.reply_to_message.video:
+        id=message.reply_to_message.video.file_id
     down=client.download_media(id)
     client.send_document("me",document=down)
     os.remove(down)
-
 
 @app.on_message((filters.me) & filters.regex("^!srch "))
 def search(client, message):
     text = message.text
-    text = text[6:]
-    ln = len(text)
-    tex = ""
-    for i in range(0, ln):
-        if text[i] == " ":
-            tex += "+"
-        else:
-            tex += text[i]
+    text = text[6:].replace(" ","+")
     result = googlesearch.search(tex, num_results=20)
     tex = ""
     der=1
@@ -250,8 +241,9 @@ def search(client, message):
         x=response.find("<title>")
         y=response.find("</title>",x)
         link=response[x+7:y]
-        tex +=f"{der} ➖ [{link}]({i})➰\n"
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id, text=tex,parse_mode="markdown")
+        tex +=f"{der} ➖ [{link}]({i})\n"
+        der+=1
+    client.edit_message_text(chat_id=message.chat.id,message_id=message.id, text=tex,parse_mode="markdown")
 
 @app.on_message(filters.regex("^!trans ") & filters.me)
 def translate(client,message):
@@ -261,12 +253,12 @@ def translate(client,message):
     dest=text2.split()[0]
     translator = Translator()
     result = translator.translate(text,dest=dest)
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=result.text)
+    client.edit_message_text(chat_id=message.chat.id,message_id=message.id,text=result.text)
 
 @app.on_message(filters.regex("^!tts$") &  filters.me)
 def tts(client,message):
     chat_id=message.chat.id
-    message_id=message.message_id
+    message_id=message.id
     text = message.reply_to_message.text
     language="en"
     myobj=gTTS(text=text,lang=language,slow=False)
@@ -298,7 +290,7 @@ def small_write(client, message):
             tex+=text[i]
             i=i+1
         time.sleep(0.2)
-        client.edit_message_text(chat_id,message_id=message.message_id,text=tex)
+        client.edit_message_text(chat_id,message_id=message.id,text=tex)
 
 @app.on_message((filters.me) & filters.regex("^!vazhe "))
 def vazhe(client,message):
@@ -313,19 +305,7 @@ def vazhe(client,message):
     deh=tex["result"]["Fdehkhoda"]
     mo=tex["result"]["motaradefmotezad"]
     text=f"**فارسی کلمه:** `{fa}`\n**تلفظ کلمه: ** `{en}`\n\n**معنی کلمه در فرهنگ لغت معین: ** `{moein}`\n\n**معنی کلمه در فرهنگ لغت دهخدا: ** `{deh}`\n\n**مترادف و متضاد کلمه: ** `{mo}`"
-    client.edit_message_text(chat_id,message_id=message.message_id,text=text)
-
-@app.on_message((filters.me) & filters.regex("^!logo "))
-def logo2(client,message):
-    text=message.text
-    chat_id=message.chat.id
-    name=text.replace("!logo ","")
-    num=randint(58,109)
-    Response=requests.post(f"https://api.codebazan.ir/ephoto/writeText?output=image&effect=create-online-black-and-white-layerlogo-{num}.html&text={name}")
-    with open("logo2.jpg","wb") as f:
-        f.write(Response.content)   
-    client.send_photo(chat_id,"logo2.jpg",reply_to_message_id=message.message_id)
-    os.remove("logo2.jpg")
+    client.edit_message_text(chat_id,message_id=message.id,text=text)
 
 @app.on_message((filters.me) & filters.regex("^!num "))
 def numtofa(client,message):
@@ -334,7 +314,7 @@ def numtofa(client,message):
     nume=text.replace("!num ","")
     Response=requests.post(f"https://api.codebazan.ir/num/?num={nume}")
     tex=Response.json()
-    client.edit_message_text(chat_id,message_id=message.message_id,text=tex["result"]["num"])
+    client.edit_message_text(chat_id,message_id=message.id,text=tex["result"]["num"])
 
 @app.on_message((filters.me) & filters.regex("^!pdf "))
 def webtopdf(client,message):
@@ -356,27 +336,13 @@ def webtopdf(client,message):
     namefile="test.pdf"
     with open("webtopdf.pdf","wb") as f:
         f.write(pdf.content)
-    client.send_document(chat_id,"webtopdf.pdf",reply_to_message_id=message.message_id)
+    client.send_document(chat_id,"webtopdf.pdf",reply_to_message_id=message.id)
     os.remove("webtopdf.pdf")
-
-@app.on_message((filters.me) & filters.regex("^!proxy$"))
-def proxy(client,message):
-    messag_id=message.message_id
-    Response=requests.post("http://api.codebazan.ir/mtproto/json/") 
-    tex=Response.json()
-    tex=tex["Result"]
-    text=""
-    for i in range(0,20):
-        server=tex[i]["server"]
-        port=tex[i]["port"]
-        secret=tex[i]["secret"]
-        text+=f"{i+1}- https://t.me/proxy?server={server}&port={port}&secret={secret}\n\n/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/\n"
-    client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=text)
 
 @app.on_message((filters.me) & filters.regex("^!pass "))
 def password_gen(client,message):
     text=message.text
-    messag_id=message.message_id
+    messag_id=message.id
     name=text.replace("!pass ","")
     Response=requests.post(f"http://api.codebazan.ir/password/?length={name}")
     client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=Response.text)
@@ -384,29 +350,15 @@ def password_gen(client,message):
 @app.on_message((filters.me) & filters.regex("^!. "))
 def strrev(client,message):
     text=message.text
-    messag_id=message.message_id
+    messag_id=message.id
     name=text.replace("!. ","")
     Response=requests.post(f"http://api.codebazan.ir/strrev/?text={name}") 
     client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=Response.text)
 
-@app.on_message((filters.me) & filters.regex("^!arz$"))
-def arz(client,message):
-    messag_id=message.message_id
-    Response=requests.post("http://api.codebazan.ir/arz/?type=arz")
-    tex=Response.json()
-    result=""
-    for i in range(0,15):
-        name=tex[i]["name"]
-        price=tex[i]["price"]
-        change=tex[i]["change"]
-        percent=tex[i]["percent"]
-        result+=f"**name:**{name}\n**price:**{price}\n**change:**{change}{percent}\n-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-\n"
-    client.edit_message_text(chat_id=message.chat.id,message_id=messag_id,text=result)
-
 @app.on_message((filters.me) & filters.regex("^!font "))
 def font(client,message):
     text=message.text
-    messag_id=message.message_id
+    messag_id=message.id
     text=text.replace("!font ","")
     Response=requests.post(f"http://api.codebazan.ir/font/?text={text}")
     tex=Response.json()
@@ -419,7 +371,7 @@ def font(client,message):
 @app.on_message((filters.me) & filters.regex("^!fontfa "))
 def fontfa(client,message):
     text=message.text
-    messag_id=message.message_id
+    messag_id=message.id
     text=text.replace("!fontfa ","")
     Response=requests.post(f"https://api.codebazan.ir/font/?type=fa&text={text}")
     tex=Response.json()
@@ -437,82 +389,16 @@ def ttr(client,message):
     language=tex.replace("!ttr ","")
     myobj=gTTS(text=text,lang=language,slow=False)
     myobj.save("testvoice.ogg")
-    client.send_audio(chat_id,"testvoice.ogg",reply_to_message_id=message.message_id)
+    client.send_audio(chat_id,"testvoice.ogg",reply_to_message_id=message.id)
     os.remove('testvoice.ogg')
-
-@app.on_message((filters.me) & filters.regex("^!bio$"))
-def biografi(client,message):
-    Response=requests.post("https://api.codebazan.ir/bio")
-    text=Response.text
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
-
-@app.on_message((filters.me) & filters.regex("^!newyear$"))
-def newyear(client,message):
-    response=requests.post("https://api.codebazan.ir/new-year")
-    tex=response.json()
-    text=""
-    day=tex["day"]
-    text+=f"{day} روز و"
-    hour=tex["hour"]
-    text+=f"{hour} ساعت و"
-    min=tex["min"]
-    text+=f"{min} دقیقه و"
-    sec=tex["sec"]
-    text+=f"{sec} ثانیه دیگر تا نوروز مانده است."
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
-
-@app.on_message((filters.me) & filters.regex("^!saadi$"))
-def ghazalsaadi(client,message):
-    response=requests.post(f"https://api.codebazan.ir/ghazalsaadi/?type=json&id={randint(0,637)}")
-    tex=response.json()
-    title=tex["title"]
-    cont=tex["contents"]
-    text=f"**عنوان: ** `{title}`\n**غزل: **`{cont}`"
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
 
 @app.on_message((filters.me) & filters.regex("!del$"))
 def delete_mess(client,message):
-    message_id=message.message_id
+    message_id=message.id
     chat_id=message.chat.id
     client.delete_messages(chat_id,message_id)
-    message_id=message.reply_to_message.message_id
+    message_id=message.reply_to_message_id
     client.delete_messages(chat_id,message_id)
-
-@app.on_message((filters.me) & filters.regex("^!gif "))
-def gif(client,message):
-    text=message.text
-    chat_id=message.chat.id
-    messag_id=message.message_id
-    name=text.replace("!gif ","")
-    response=requests.post(f"https://api.codebazan.ir/image/?type=gif&text={name}")
-    text1=response.json()
-    url=text1[f"giflink{randint(1,11)}"]
-    gif=requests.get(url)
-    with open(f"{name}.gif","wb") as f:
-        f.write(gif.content)
-    client.send_animation(chat_id,f"{name}.gif",reply_to_message_id=messag_id)
-    os.remove(f"{name}.gif")
-
-@app.on_message((filters.me) & filters.regex("^!card$"))
-def visacard(client,message):
-    response=requests.post(f"https://api.codebazan.ir/visa-card/")
-    text=response.json()
-    i=randint(0,11)
-    name=text["Result"][i]["name"]
-    lastname=text["Result"][i]["lastname"]
-    adress=text["Result"][i]["Address"]
-    city=text["Result"][i]["City"]
-    state=text["Result"][i]["State"]
-    post=text["Result"][i]["Postalcode"]
-    country=text["Result"][i]["Country"]
-    birthday=text["Result"][i]["birthday"]
-    cardtype=text["Result"][i]["cardtype"]
-    number=text["Result"][i]["cardnumber"]
-    cvv2=text["Result"][i]["CVV2"]
-    expire=text["Result"][i]["Expirationdate"]
-    result=f"**name:** `{name}`\n**lastname:** `{lastname}`\n**address:** `{adress}`\n**city:** `{city}`\n**state:** `{state}`\n**postalcode:** `{post}`\n**country:** `{country}`\n**birthday:** `{birthday}`\n**cardtype:** `{cardtype}`\n**cardnumber:** `{number}`\n**cvv2:** `{cvv2}`\n**Expirationdate:** `{expire}`"
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=result)
-
 
 @app.on_message((filters.me) & filters.regex("^!meli"))
 def meli(client,message):
@@ -522,22 +408,6 @@ def meli(client,message):
     tex=Response.json()
     client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=tex["Result"])
 
-@app.on_message((filters.me) & filters.regex("^!air "))
-def air(client,message):
-    text=message.text
-    city=text.replace("!air ","")
-    Response=requests.post(f"https://api.codebazan.ir/weather/?city={city}")
-    tex=Response.json()
-    ostan=tex["result"]["استان"]
-    shahr=tex["result"]["شهر"]
-    dama=tex["result"]["دما"]
-    sorat=tex["result"]["سرعت باد"]
-    vaziat=tex["result"]["وضعیت هوا"]
-    fdama=tex["فردا"]["دما"]
-    fvaziat=tex["فردا"]["وضعیت هوا"]
-    text=f"**استان: ** {ostan}\n**شهر: ** {shahr}\n**          امروز **\n**دما: ** {dama}\n**سرعت باد: ** {sorat}\n**وضعیت هوا: ** {vaziat}\n\n      **فردا **\n**دما: ** {fdama}\n**وضعیت هوا: ** {fvaziat}"
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=text)
-    
 @app.on_message((filters.me) & filters.regex("!down "))
 def download(client,message):
     text=message.text
@@ -571,24 +441,15 @@ def help(client,message):
     help+="**command:**\n!trans \n**descriptin:**\nget text and source language and defective language so print trtanslate\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!tts \n**descriptin:**\nget text and send voice text to language english \n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n! \n**descriptin:**\nget text and print it slowly\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n!air\n**descriptin:**\nget city and send climatic condition\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!meli\n**descriptin:**\nsend result sending code meli\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n!card\n**descriptin:**\nsend credit card\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n!gif\n**descriptin:**\nget string and send gif withe string\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n!saadi\n**descriptin:**\nsend one lyric from saadi\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n!newyear\n**descriptin:**\nsend remaining amount until nowruz\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n!bio\n**descriptin:**\nsend one bio\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!vazhe\n**descriptin:**\nget word prsion and send meaning\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!num\n**descriptin:**\nget number and send number to persion\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!.\n**descriptin:**\nget string and send strrev\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n!arz\n**descriptin:**\nsend list from name , price and change currency\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!font\n**descriptin:**\nget name or any thing and send difrent fonts\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!fontfa\n**descriptin:**\nget persion text and send difrent font\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n!logo\n**descriptin:**\nget text and send logo withe text\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!ttr\n**descriptin:**\nget language and text so send voice text withe input language \n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!pdf\n**descriptin:**\nget link web and send pdf shot web \n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n!proxy\n**descriptin:**\nsend 20 MTproxy for telegram\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
     help+="**command:**\n!pass\n**descriptin:**\nget number and genereat password to len number\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    help+="**command:**\n(دانلود نمیشه|صبر کن دانلود شه)\n(دانلود نموشه|صبر کن دانلود شود)\n**descriptin:**\ndownload and send media to saved  message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.message_id,text=help)
+    help+="**command:**\n(دانلود نمیشه|صبر کن دانلود شه)\n**descriptin:**\ndownload and send media to saved  message\n\n/*/*/*/*/*/*/*/*/*/*/*/*/\n\n"
+    client.edit_message_text(chat_id=message.chat.id,message_id=message.id,text=help)
 app.run()  # Automatically start() and idle()
