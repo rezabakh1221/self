@@ -235,7 +235,7 @@ def download_image(client,message):
 def search(client, message):
     text = message.text
     text = text[6:].replace(" ","+")
-    result = googlesearch.search(text, num_results=10)
+    result = googlesearch.search(text, num_results=20)
     tex = ""
     der=1
     for i in result:
@@ -245,7 +245,8 @@ def search(client, message):
         link=response[x+7:y]
         tex +=f"{der} ➖ [{link}]({i})\n"
         der+=1
-    client.edit_message_text(chat_id=message.chat.id,message_id=message.id, text=tex,parse_mode=enums.ParseMode.DEFAULT)
+    message.reply(tex)
+    message.delete()
 
 @app.on_message(filters.regex("^!trans ") & filters.me)
 def translate(client,message):
